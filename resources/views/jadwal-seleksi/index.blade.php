@@ -78,6 +78,9 @@
                                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                 Penandatangan</th>
                                             <th
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Status</th>
+                                            <th
                                                 class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                 Aksi</th>
                                         </tr>
@@ -98,17 +101,20 @@
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap">
                                                     {{ $jadwal->penandatangan->name ?? 'N/A' }}</td>
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    @if ($jadwal->status == 'menunggu')
+                                                        <span
+                                                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                                            Menunggu
+                                                        </span>
+                                                    @else
+                                                        <span
+                                                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                                            Diterbitkan
+                                                        </span>
+                                                    @endif
+                                                </td>
                                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-
-                                                    <a href="{{ route('penugasan.index', $jadwal->id) }}"
-                                                        class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-500 active:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
-                                                        Petugas
-                                                    </a>
-
-                                                    <a href="{{ route('peserta.index', $jadwal->id) }}"
-                                                        class="ml-2 inline-flex items-center px-4 py-2 bg-purple-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-purple-500 active:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
-                                                        Peserta
-                                                    </a>
 
                                                     <x-secondary-button x-data=""
                                                         x-on:click.prevent="
@@ -132,124 +138,143 @@
                                                         class="ml-2">
                                                         Delete
                                                     </x-danger-button>
+                                                    @if ($jadwal->status == 'diterbitkan')
+                                                        <a href="{{ route('penugasan.index', $jadwal->id) }}"
+                                                            class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-500 active:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
+                                                            Petugas
+                                                        </a>
 
-                                                    <div class="inline-block ml-2">
-                                                        <x-dropdown align="right" width="48">
-                                                            <x-slot name="trigger">
-                                                                <button
-                                                                    class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white dark:bg-gray-200 dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
-                                                                    <div>Unduh</div>
-                                                                    <div class="ms-1">
-                                                                        <svg class="fill-current h-4 w-4"
-                                                                            xmlns="http://www.w3.org/2000/svg"
-                                                                            viewBox="0 0 20 20">
-                                                                            <path fill-rule="evenodd"
-                                                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                                                clip-rule="evenodd" />
-                                                                        </svg>
+                                                        <a href="{{ route('peserta.index', $jadwal->id) }}"
+                                                            class="ml-2 inline-flex items-center px-4 py-2 bg-purple-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-purple-500 active:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
+                                                            Peserta
+                                                        </a>
+
+                                                        <div class="inline-block ml-2">
+                                                            <x-dropdown align="right" width="48">
+                                                                <x-slot name="trigger">
+                                                                    <button
+                                                                        class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white dark:bg-gray-200 dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
+                                                                        <div>Unduh</div>
+                                                                        <div class="ms-1">
+                                                                            <svg class="fill-current h-4 w-4"
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                viewBox="0 0 20 20">
+                                                                                <path fill-rule="evenodd"
+                                                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                                                    clip-rule="evenodd" />
+                                                                            </svg>
+                                                                        </div>
+                                                                    </button>
+                                                                </x-slot>
+
+                                                                <x-slot name="content">
+                                                                    <x-dropdown-link :href="route(
+                                                                        'jadwal.download-kartu',
+                                                                        $jadwal->id,
+                                                                    )" target="_blank">
+                                                                        Download Kartu Login
+                                                                    </x-dropdown-link>
+                                                                    <x-dropdown-link :href="route(
+                                                                        'jadwal.download-daftar-hadir',
+                                                                        $jadwal->id,
+                                                                    )" target="_blank">
+                                                                        Download Daftar Hadir Petugas
+                                                                    </x-dropdown-link>
+                                                                    <x-dropdown-link :href="route(
+                                                                        'jadwal.download-daftar-hadir-peserta',
+                                                                        $jadwal->id,
+                                                                    )" target="_blank">
+                                                                        Download Daftar Hadir Peserta
+                                                                    </x-dropdown-link>
+                                                                    <x-dropdown-link :href="route(
+                                                                        'jadwal.download-berita-acara',
+                                                                        $jadwal->id,
+                                                                    )" target="_blank">
+                                                                        Download Berita Acara
+                                                                    </x-dropdown-link>
+                                                                    <x-dropdown-link :href="route(
+                                                                        'jadwal.download-spt',
+                                                                        $jadwal->id,
+                                                                    )" target="_blank">
+                                                                        Download Surat Tugas
+                                                                    </x-dropdown-link>
+                                                                </x-slot>
+                                                            </x-dropdown>
+                                                        </div>
+
+                                                        <div class="inline-block ml-2">
+                                                            <x-dropdown align="right" width="48">
+                                                                <x-slot name="trigger">
+                                                                    <button
+                                                                        class="inline-flex items-center px-4 py-2 bg-yellow-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-yellow-400 active:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
+                                                                        <div>Absensi</div>
+                                                                        <div class="ms-1">
+                                                                            <svg class="fill-current h-4 w-4"
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                viewBox="0 0 20 20">
+                                                                                <path fill-rule="evenodd"
+                                                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                                                    clip-rule="evenodd" />
+                                                                            </svg>
+                                                                        </div>
+                                                                    </button>
+                                                                </x-slot>
+
+                                                                <x-slot name="content">
+                                                                    <x-dropdown-link :href="route('absensi.index', $jadwal->id)">
+                                                                        Input Kehadiran (By Sistem)
+                                                                    </x-dropdown-link>
+
+                                                                    <div
+                                                                        class="border-t border-gray-200 dark:border-gray-600">
                                                                     </div>
-                                                                </button>
-                                                            </x-slot>
 
-                                                            <x-slot name="content">
-                                                                <x-dropdown-link :href="route('jadwal.download-kartu', $jadwal->id)" target="_blank">
-                                                                    Download Kartu Login
-                                                                </x-dropdown-link>
-                                                                <x-dropdown-link :href="route(
-                                                                    'jadwal.download-daftar-hadir',
-                                                                    $jadwal->id,
-                                                                )" target="_blank">
-                                                                    Download Daftar Hadir Petugas
-                                                                </x-dropdown-link>
-                                                                <x-dropdown-link :href="route(
-                                                                    'jadwal.download-daftar-hadir-peserta',
-                                                                    $jadwal->id,
-                                                                )" target="_blank">
-                                                                    Download Daftar Hadir Peserta
-                                                                </x-dropdown-link>
-                                                                <x-dropdown-link :href="route(
-                                                                    'jadwal.download-berita-acara',
-                                                                    $jadwal->id,
-                                                                )" target="_blank">
-                                                                    Download Berita Acara
-                                                                </x-dropdown-link>
-                                                                <x-dropdown-link :href="route('jadwal.download-spt', $jadwal->id)" target="_blank">
-                                                                    Download Surat Tugas
-                                                                </x-dropdown-link>
-                                                            </x-slot>
-                                                        </x-dropdown>
-                                                    </div>
+                                                                    <x-dropdown-link :href="route(
+                                                                        'absensi.download.peserta',
+                                                                        $jadwal->id,
+                                                                    )" target="_blank">
+                                                                        Unduh Laporan Peserta
+                                                                    </x-dropdown-link>
 
-                                                    <div class="inline-block ml-2">
-                                                        <x-dropdown align="right" width="48">
-                                                            <x-slot name="trigger">
-                                                                <button
-                                                                    class="inline-flex items-center px-4 py-2 bg-yellow-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-yellow-400 active:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
-                                                                    <div>Absensi</div>
-                                                                    <div class="ms-1">
-                                                                        <svg class="fill-current h-4 w-4"
-                                                                            xmlns="http://www.w3.org/2000/svg"
-                                                                            viewBox="0 0 20 20">
-                                                                            <path fill-rule="evenodd"
-                                                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                                                clip-rule="evenodd" />
-                                                                        </svg>
-                                                                    </div>
-                                                                </button>
-                                                            </x-slot>
+                                                                    <x-dropdown-link :href="route(
+                                                                        'absensi.download.petugas',
+                                                                        $jadwal->id,
+                                                                    )" target="_blank">
+                                                                        Unduh Laporan Petugas
+                                                                    </x-dropdown-link>
 
-                                                            <x-slot name="content">
-                                                                <x-dropdown-link :href="route('absensi.index', $jadwal->id)">
-                                                                    Input Kehadiran (By Sistem)
-                                                                </x-dropdown-link>
+                                                                </x-slot>
+                                                            </x-dropdown>
+                                                        </div>
 
-                                                                <div
-                                                                    class="border-t border-gray-200 dark:border-gray-600">
-                                                                </div>
+                                                        <div class="inline-block ml-2">
+                                                            <x-dropdown align="right" width="48">
+                                                                <x-slot name="trigger">
+                                                                    <button
+                                                                        class="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-500 active:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
+                                                                        <div>Eviden</div>
+                                                                        <div class="ms-1">
+                                                                            <svg class="fill-current h-4 w-4"
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                viewBox="0 0 20 20">
+                                                                                <path fill-rule="evenodd"
+                                                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                                                    clip-rule="evenodd" />
+                                                                            </svg>
+                                                                        </div>
+                                                                    </button>
+                                                                </x-slot>
 
-                                                                <x-dropdown-link :href="route(
-                                                                    'absensi.download.peserta',
-                                                                    $jadwal->id,
-                                                                )" target="_blank">
-                                                                    Unduh Laporan Peserta
-                                                                </x-dropdown-link>
-
-                                                                <x-dropdown-link :href="route(
-                                                                    'absensi.download.petugas',
-                                                                    $jadwal->id,
-                                                                )" target="_blank">
-                                                                    Unduh Laporan Petugas
-                                                                </x-dropdown-link>
-
-                                                            </x-slot>
-                                                        </x-dropdown>
-                                                    </div>
-
-                                                    <div class="inline-block ml-2">
-                                                        <x-dropdown align="right" width="48">
-                                                            <x-slot name="trigger">
-                                                                <button
-                                                                    class="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-500 active:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
-                                                                    <div>Eviden</div>
-                                                                    <div class="ms-1">
-                                                                        <svg class="fill-current h-4 w-4"
-                                                                            xmlns="http://www.w3.org/2000/svg"
-                                                                            viewBox="0 0 20 20">
-                                                                            <path fill-rule="evenodd"
-                                                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                                                clip-rule="evenodd" />
-                                                                        </svg>
-                                                                    </div>
-                                                                </button>
-                                                            </x-slot>
-
-                                                            <x-slot name="content">
-                                                                <x-dropdown-link :href="route('eviden.index', $jadwal->id)">
-                                                                    Upload Eviden Manual (Scan)
-                                                                </x-dropdown-link>
-                                                            </x-slot>
-                                                        </x-dropdown>
-                                                    </div>
+                                                                <x-slot name="content">
+                                                                    <x-dropdown-link :href="route('eviden.index', $jadwal->id)">
+                                                                        Upload Eviden Manual (Scan)
+                                                                    </x-dropdown-link>
+                                                                </x-slot>
+                                                            </x-dropdown>
+                                                        </div>
+                                                    @else
+                                                        <span class="text-xs text-gray-500 italic">Menunggu NST</span>
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @empty
@@ -308,13 +333,13 @@
                                                 class="mt-1 block w-full" :value="old('tanggal_akhir_pelaksanaan')" required />
                                             <x-input-error :messages="$errors->get('tanggal_akhir_pelaksanaan')" class="mt-2" />
                                         </div>
-                                        <div>
+                                        {{-- <div>
                                             <x-input-label for="nomor_surat_tugas" value="Nomor Surat Tugas" />
                                             <x-text-input id="nomor_surat_tugas" name="nomor_surat_tugas"
                                                 type="text" class="mt-1 block w-full" :value="old('nomor_surat_tugas')"
                                                 required />
                                             <x-input-error :messages="$errors->get('nomor_surat_tugas')" class="mt-2" />
-                                        </div>
+                                        </div> --}}
                                         <div>
                                             <x-input-label for="kota_surat" value="Kota Surat" />
                                             <x-text-input id="kota_surat" name="kota_surat" type="text"
@@ -389,13 +414,13 @@
                                                 required />
                                             <x-input-error :messages="$errors->get('tanggal_akhir_pelaksanaan')" class="mt-2" />
                                         </div>
-                                        <div>
+                                        {{-- <div>
                                             <x-input-label for="edit_nomor_surat_tugas" value="Nomor Surat Tugas" />
                                             <x-text-input id="edit_nomor_surat_tugas" name="nomor_surat_tugas"
                                                 type="text" class="mt-1 block w-full"
                                                 x-model="editData.nomor_surat_tugas" required />
                                             <x-input-error :messages="$errors->get('nomor_surat_tugas')" class="mt-2" />
-                                        </div>
+                                        </div> --}}
                                         <div>
                                             <x-input-label for="edit_kota_surat" value="Kota Surat" />
                                             <x-text-input id="edit_kota_surat" name="kota_surat" type="text"

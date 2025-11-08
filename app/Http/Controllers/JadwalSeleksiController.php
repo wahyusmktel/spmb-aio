@@ -66,20 +66,23 @@ class JadwalSeleksiController extends Controller
             'tanggal_mulai_pelaksanaan' => 'required|date',
             'tanggal_akhir_pelaksanaan' => 'required|date|after_or_equal:tanggal_mulai_pelaksanaan',
             'lokasi_kegiatan' => 'required|string|max:255',
-            'nomor_surat_tugas' => 'required|string|max:100',
+            // 'nomor_surat_tugas' => 'required|string|max:100', // <-- HAPUS VALIDASI INI
             'kota_surat' => 'required|string|max:100',
             'tanggal_surat' => 'required|date',
             'id_penandatangan' => 'required|exists:users,id',
         ]);
 
-        // 4. Siapkan data dan INJECT id_tahun_pelajaran yang aktif
+        $request->request->add(['form_type' => 'create']);
+
+        // Siapkan data create
         $data = $request->all();
-        $data['id_tahun_pelajaran'] = $tahunAktif->id;
-        $data['form_type'] = 'create'; // Jaga logic error form
+        $data['id_tahun_pelajaran'] = $tahunAktif->id; // <-- INJECT TAHUN AKTIF
+        $data['status'] = 'menunggu'; // <-- STATUS BARU
+        $data['nomor_surat_tugas'] = null; // <-- NST DIBUAT NULL
 
         JadwalSeleksi::create($data);
 
-        return redirect()->route('jadwal-seleksi.index')->with('success', 'Jadwal Seleksi berhasil ditambahkan.');
+        return redirect()->route('jadwal-seleksi.index')->with('success', 'Pengajuan Jadwal Seleksi berhasil dibuat.');
     }
 
     /**
@@ -93,7 +96,7 @@ class JadwalSeleksiController extends Controller
             'tanggal_mulai_pelaksanaan' => 'required|date',
             'tanggal_akhir_pelaksanaan' => 'required|date|after_or_equal:tanggal_mulai_pelaksanaan',
             'lokasi_kegiatan' => 'required|string|max:255',
-            'nomor_surat_tugas' => 'required|string|max:100',
+            // 'nomor_surat_tugas' => 'required|string|max:100',
             'kota_surat' => 'required|string|max:100',
             'tanggal_surat' => 'required|date',
             'id_penandatangan' => 'required|exists:users,id',

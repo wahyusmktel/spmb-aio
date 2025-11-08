@@ -27,6 +27,8 @@ class JadwalSeleksi extends Model
         'file_hadir_peserta', // <-- TAMBAHKAN INI
         'file_hadir_petugas', // <-- TAMBAHKAN INI
         'file_berita_acara', // <-- TAMBAHKAN INI
+        'status', // <-- TAMBAHKAN
+        'published_by_user_id', // <-- TAMBAHKAN
     ];
 
     /**

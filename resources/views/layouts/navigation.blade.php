@@ -15,21 +15,28 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('guru.index')" :active="request()->routeIs('guru.index')">
-                        {{ __('Data Guru') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('tahun-pelajaran.index')" :active="request()->routeIs('tahun-pelajaran.index')">
-                        {{ __('Tahun Pelajaran') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('jadwal-seleksi.index')" :active="request()->routeIs('jadwal-seleksi.index')">
-                        {{ __('Jadwal Seleksi') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('referensi-tugas.index')" :active="request()->routeIs('referensi-tugas.index')">
-                        {{ __('Referensi Tugas') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('referensi-akun-cbt.index')" :active="request()->routeIs('referensi-akun-cbt.index')">
-                        {{ __('Akun CBT') }}
-                    </x-nav-link>
+                    @role('Staff TU')
+                        <x-nav-link :href="route('pengajuan.index')" :active="request()->routeIs('pengajuan.index')">
+                            {{ __('Pengajuan Surat') }}
+                        </x-nav-link>
+                    @endrole
+                    @role('Admin')
+                        <x-nav-link :href="route('guru.index')" :active="request()->routeIs('guru.index')">
+                            {{ __('Data Guru') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('tahun-pelajaran.index')" :active="request()->routeIs('tahun-pelajaran.index')">
+                            {{ __('Tahun Pelajaran') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('jadwal-seleksi.index')" :active="request()->routeIs('jadwal-seleksi.index')">
+                            {{ __('Jadwal Seleksi') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('referensi-tugas.index')" :active="request()->routeIs('referensi-tugas.index')">
+                            {{ __('Referensi Tugas') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('referensi-akun-cbt.index')" :active="request()->routeIs('referensi-akun-cbt.index')">
+                            {{ __('Akun CBT') }}
+                        </x-nav-link>
+                    @endrole
                 </div>
             </div>
 

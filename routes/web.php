@@ -10,6 +10,7 @@ use App\Http\Controllers\ReferensiAkunCbtController;
 use App\Http\Controllers\PesertaSeleksiController;
 use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\EvidenController;
+use App\Http\Controllers\PengajuanSuratController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -102,6 +103,15 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/jadwal-seleksi/{jadwal}/eviden/upload-berita-acara', [EvidenController::class, 'storeBeritaAcara'])
         ->name('eviden.store.berita-acara');
+
+    // --- RUTE BARU STAFF TU ---
+    // Gunakan middleware role dari Spatie
+    Route::middleware(['role:Staff TU'])->group(function () {
+        Route::get('/pengajuan-surat', [PengajuanSuratController::class, 'index'])
+            ->name('pengajuan.index');
+        Route::post('/pengajuan-surat/{jadwal}/terbitkan', [PengajuanSuratController::class, 'terbitkan'])
+            ->name('pengajuan.terbitkan');
+    });
 });
 
 require __DIR__ . '/auth.php';
