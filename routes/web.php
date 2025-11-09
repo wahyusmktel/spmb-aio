@@ -83,6 +83,8 @@ Route::middleware('auth')->group(function () {
         ->name('jadwal.download-spt');
     Route::get('/jadwal-seleksi/{jadwal}/download-laporan-kegiatan', [JadwalSeleksiController::class, 'downloadLaporanKegiatan'])
         ->name('jadwal.download-laporan-kegiatan');
+    Route::get('/jadwal-seleksi/{jadwal}/download-hasil-seleksi', [JadwalSeleksiController::class, 'downloadHasilSeleksi'])
+        ->name('jadwal.download-hasil-seleksi');
 
     Route::resource('referensi-tugas', ReferensiTugasController::class);
 

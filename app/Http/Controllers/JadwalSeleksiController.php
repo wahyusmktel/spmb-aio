@@ -355,4 +355,36 @@ class JadwalSeleksiController extends Controller
         $namaFile = 'Laporan_Kegiatan_' . $jadwal->judul_kegiatan . '.pdf';
         return $pdf->stream($namaFile);
     }
+
+    /**
+     * === METHOD BARU: DOWNLOAD LAPORAN HASIL SELEKSI ===
+     */
+    public function downloadHasilSeleksi(JadwalSeleksi $jadwal)
+    {
+        // 1. Ambil data jadwal
+        $jadwal->load('tahunPelajaran', 'penandatangan');
+
+        // 2. Ambil semua PESERTA yang terdaftar di jadwal ini
+        //    Kita eager load akun CBT-nya untuk username
+        $peserta = PesertaSeleksi::with('akunCbt')
+            ->where('id_jadwal_seleksi', $jadwal->id)
+            ->get()
+            // Urutkan berdasarkan Nama Pendaftar
+            ->sortBy('nama_pendaftar');
+
+        // 3. Validasi
+        if ($peserta->isEmpty()) {
+            return redirect()->route('jadwal-seleksi.index')->with('error', 'Gagal cetak hasil: Belum ada peserta di jadwal ini.');
+        }
+
+        // 4. Load view PDF (Kirim data peserta yang sudah lengkap)
+        $pdf = Pdf::loadView('downloads.hasil-seleksi', compact('jadwal', 'peserta'));
+
+        // 5. Set ukuran kertas A4
+        $pdf->setPaper('a4', 'portrait');
+
+        // 6. Stream ke browser
+        $namaFile = 'Hasil_Seleksi_' . $jadwal->judul_kegiatan . '.pdf';
+        return $pdf->stream($namaFile);
+    }
 }

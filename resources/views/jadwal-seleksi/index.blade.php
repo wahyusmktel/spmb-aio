@@ -287,6 +287,35 @@
                                                                 </x-slot>
                                                             </x-dropdown>
                                                         </div>
+                                                        <div class="inline-block ml-2">
+                                                            <x-dropdown align="right" width="48">
+                                                                <x-slot name="trigger">
+                                                                    <button
+                                                                        class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-500 active:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
+                                                                        <div>Hasil</div>
+                                                                        <div class="ms-1">
+                                                                            <svg class="fill-current h-4 w-4"
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                viewBox="0 0 20 20">
+                                                                                <path fill-rule="evenodd"
+                                                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                                                    clip-rule="evenodd" />
+                                                                            </svg>
+                                                                        </div>
+                                                                    </button>
+                                                                </x-slot>
+
+                                                                <x-slot name="content">
+                                                                    <x-dropdown-link :href="route(
+                                                                        'jadwal.download-hasil-seleksi',
+                                                                        $jadwal->id,
+                                                                    )"
+                                                                        target="_blank">
+                                                                        Hasil Tes Buta Warna
+                                                                    </x-dropdown-link>
+                                                                </x-slot>
+                                                            </x-dropdown>
+                                                        </div>
                                                     @else
                                                         <span class="text-xs text-gray-500 italic">Menunggu NST</span>
                                                     @endif
