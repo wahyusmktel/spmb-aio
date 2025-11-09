@@ -50,7 +50,7 @@ class AbsensiController extends Controller
                     ->update(['kehadiran' => false]);
 
                 PenugasanPetugas::where('id_jadwal_seleksi', $jadwal->id)
-                    ->update(['kehadiran' => false]);
+                    ->update(['absensi_admin' => false]);
 
                 // 2. SET HADIR: Update yang diceklis (hadir) menjadi 'true'
                 if ($request->has('hadir_peserta')) {
@@ -60,7 +60,7 @@ class AbsensiController extends Controller
 
                 if ($request->has('hadir_petugas')) {
                     PenugasanPetugas::whereIn('id', $request->hadir_petugas)
-                        ->update(['kehadiran' => true]);
+                        ->update(['absensi_admin' => true]);
                 }
             });
         } catch (\Exception $e) {
@@ -122,8 +122,8 @@ class AbsensiController extends Controller
         // 3. Hitung Statistik
         $stats = [
             'total' => $petugas->count(),
-            'hadir' => $petugas->where('kehadiran', true)->count(),
-            'tidak_hadir' => $petugas->where('kehadiran', false)->count(),
+            'hadir' => $petugas->where('absensi_admin', true)->count(),
+            'tidak_hadir' => $petugas->where('absensi_admin', false)->count(),
         ];
 
         // 4. Load PDF

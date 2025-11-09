@@ -94,8 +94,14 @@
                                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
                                                 Peran Tugas</th>
                                             <th
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
+                                                Bukti Mandiri</th>
+                                            <th
                                                 class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
-                                                Kehadiran (Ceklis)</th>
+                                                Verifikasi Hadir (Ceklis)</th>
+                                            {{-- <th
+                                                class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
+                                                Kehadiran (Ceklis)</th> --}}
                                         </tr>
                                     </thead>
                                     <tbody
@@ -107,11 +113,30 @@
                                                 <td class="px-6 py-4 whitespace-pre-wrap">
                                                     {{ $p->referensiTugas->deskripsi_tugas ?? 'N/A' }}</td>
                                                 <td class="px-6 py-4 whitespace-nowrap text-center">
+                                                    @if ($p->absensi_mandiri_at)
+                                                        <a href="{{ Storage::url($p->file_bukti_mandiri) }}"
+                                                            target="_blank"
+                                                            class="text-sm text-green-600 dark:text-green-400 hover:underline">
+                                                            Lihat Foto
+                                                        </a>
+                                                        <div class="text-xs text-gray-500">
+                                                            {{ $p->absensi_mandiri_at->format('H:i') }}</div>
+                                                    @else
+                                                        <span class="text-sm text-red-500">Belum Absen Mandiri</span>
+                                                    @endif
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-center">
+                                                    <input type="checkbox" name="hadir_petugas[]"
+                                                        value="{{ $p->id }}"
+                                                        {{ $p->absensi_admin ? 'checked' : '' }}
+                                                        class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800">
+                                                </td>
+                                                {{-- <td class="px-6 py-4 whitespace-nowrap text-center">
                                                     <input type="checkbox" name="hadir_petugas[]"
                                                         value="{{ $p->id }}"
                                                         {{ $p->kehadiran ? 'checked' : '' }}
                                                         class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800">
-                                                </td>
+                                                </td> --}}
                                             </tr>
                                         @empty
                                             <tr>

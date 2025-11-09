@@ -13,6 +13,7 @@ use App\Http\Controllers\EvidenController;
 use App\Http\Controllers\PengajuanSuratController;
 use App\Http\Controllers\PersetujuanController;
 use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\AbsensiMandiriController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -139,6 +140,16 @@ Route::middleware('auth')->group(function () {
             ->name('laporan.petugas.index');
         Route::get('/laporan/petugas/download', [LaporanController::class, 'downloadPetugas'])
             ->name('laporan.petugas.download');
+    });
+
+    // --- RUTE BARU PORTAL GURU/PETUGAS ---
+    Route::middleware(['role:Guru'])->group(function () {
+        Route::get('/absensi-mandiri', [AbsensiMandiriController::class, 'index'])
+            ->name('absensi-mandiri.index');
+
+        // {penugasan} adalah ID dari tabel 'penugasan_petugas'
+        Route::post('/absensi-mandiri/{penugasan}', [AbsensiMandiriController::class, 'store'])
+            ->name('absensi-mandiri.store');
     });
 });
 

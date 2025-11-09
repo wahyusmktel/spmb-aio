@@ -194,7 +194,7 @@
                     <td>{{ $p->guru->nama_guru ?? 'N/A' }}</td>
                     <td>{{ $p->referensiTugas->deskripsi_tugas ?? 'N/A' }}</td>
                     <td style="text-align: center;">
-                        @if ($p->kehadiran)
+                        @if ($p->absensi_admin)
                             <span class="status-hadir">HADIR</span>
                         @else
                             <span class="status-absen">TIDAK HADIR</span>

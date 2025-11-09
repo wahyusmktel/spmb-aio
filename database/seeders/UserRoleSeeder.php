@@ -20,6 +20,7 @@ class UserRoleSeeder extends Seeder
         $roleAdmin = Role::firstOrCreate(['name' => 'Admin']);
         $roleStaffTU = Role::firstOrCreate(['name' => 'Staff TU']);
         $roleKepsek = Role::firstOrCreate(['name' => 'Kepala Sekolah']);
+        $roleGuru = Role::firstOrCreate(['name' => 'Guru']);
 
         // 2. Jadikan User pertama (ID=1) sebagai Admin
         // Kita asumsikan user pertama yang terdaftar (mungkin kamu) adalah Admin.
@@ -58,5 +59,11 @@ class UserRoleSeeder extends Seeder
             ['name' => 'Kepala Sekolah', 'password' => Hash::make('password123')]
         );
         $kepsekUser->assignRole($roleKepsek);
+
+        $guruUser = User::updateOrCreate(
+            ['email' => 'guru@gmail.com'],
+            ['name' => 'Guru Contoh', 'password' => Hash::make('password123')]
+        );
+        $guruUser->assignRole($roleGuru);
     }
 }

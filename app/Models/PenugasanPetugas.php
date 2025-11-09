@@ -17,12 +17,15 @@ class PenugasanPetugas extends Model
         'id_jadwal_seleksi',
         'id_guru',
         'id_referensi_tugas',
-        'kehadiran',
+        'absensi_admin',
+        'absensi_mandiri_at', // <-- TAMBAHKAN
+        'file_bukti_mandiri', // <-- TAMBAHKAN
     ];
 
     // TAMBAHKAN/UPDATE $casts INI
     protected $casts = [
-        'kehadiran' => 'boolean',
+        'absensi_admin' => 'boolean', // <-- UBAH DARI 'kehadiran'
+        'absensi_mandiri_at' => 'datetime', // <-- TAMBAHKAN
     ];
 
     // Relasi ke Jadwal

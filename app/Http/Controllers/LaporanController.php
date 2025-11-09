@@ -159,8 +159,8 @@ class LaporanController extends Controller
             if ($petugas) {
                 $stats = [
                     'total' => $petugas->count(),
-                    'hadir' => $petugas->where('kehadiran', true)->count(),
-                    'tidak_hadir' => $petugas->where('kehadiran', false)->count(),
+                    'hadir' => $petugas->where('absensi_admin', true)->count(),
+                    'tidak_hadir' => $petugas->where('absensi_admin', false)->count(),
                 ];
             }
         }
@@ -189,8 +189,8 @@ class LaporanController extends Controller
 
         $stats = [
             'total' => $petugas->count(),
-            'hadir' => $petugas->where('kehadiran', true)->count(),
-            'tidak_hadir' => $petugas->where('kehadiran', false)->count(),
+            'hadir' => $petugas->where('absensi_admin', true)->count(),
+            'tidak_hadir' => $petugas->where('absensi_admin', false)->count(),
         ];
 
         $pdf = Pdf::loadView('downloads.rekap-petugas', compact('petugas', 'stats', 'tanggal_mulai', 'tanggal_akhir', 'jadwal_dipilih'));

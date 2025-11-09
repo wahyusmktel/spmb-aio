@@ -33,6 +33,11 @@
                             {{ __('Laporan Petugas') }}
                         </x-nav-link>
                     @endrole
+                    @role('Guru')
+                        <x-nav-link :href="route('absensi-mandiri.index')" :active="request()->routeIs('absensi-mandiri.index')">
+                            {{ __('Absensi Tugas Saya') }}
+                        </x-nav-link>
+                    @endrole
                     @role('Admin')
                         <x-nav-link :href="route('guru.index')" :active="request()->routeIs('guru.index')">
                             {{ __('Data Guru') }}

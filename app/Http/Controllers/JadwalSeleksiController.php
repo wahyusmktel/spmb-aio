@@ -335,8 +335,8 @@ class JadwalSeleksiController extends Controller
         // 6. HITUNG STATISTIK PETUGAS
         $statsPetugas = [
             'total' => $petugas->count(),
-            'hadir' => $petugas->where('kehadiran', true)->count(),
-            'tidak_hadir' => $petugas->where('kehadiran', false)->count(),
+            'hadir' => $petugas->where('absensi_admin', true)->count(),
+            'tidak_hadir' => $petugas->where('absensi_admin', false)->count(),
         ];
 
         // 7. Load view PDF
