@@ -54,6 +54,26 @@
                         <x-nav-link :href="route('referensi-akun-cbt.index')" :active="request()->routeIs('referensi-akun-cbt.index')">
                             {{ __('Akun CBT') }}
                         </x-nav-link>
+
+                        <div class="hidden sm:flex sm:items-center sm:ms-6">
+                            <x-dropdown align="right" width="48">
+                                <x-slot name="trigger">
+                                    <button
+                                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 ...">
+                                        <div>Manajemen Admin</div>
+                                        <div class="ms-1"><svg ...></svg></div>
+                                    </button>
+                                </x-slot>
+                                <x-slot name="content">
+                                    <x-dropdown-link :href="route('users.index')" :active="request()->routeIs('users.*')">
+                                        Manajemen User
+                                    </x-dropdown-link>
+                                    <x-dropdown-link :href="route('roles.index')" :active="request()->routeIs('roles.*')">
+                                        Manajemen Role
+                                    </x-dropdown-link>
+                                </x-slot>
+                            </x-dropdown>
+                        </div>
                     @endrole
                 </div>
             </div>

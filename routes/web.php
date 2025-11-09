@@ -14,6 +14,8 @@ use App\Http\Controllers\PengajuanSuratController;
 use App\Http\Controllers\PersetujuanController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\AbsensiMandiriController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -150,6 +152,17 @@ Route::middleware('auth')->group(function () {
         // {penugasan} adalah ID dari tabel 'penugasan_petugas'
         Route::post('/absensi-mandiri/{penugasan}', [AbsensiMandiriController::class, 'store'])
             ->name('absensi-mandiri.store');
+    });
+
+    Route::middleware(['role:Admin'])->group(function () {
+        // ... (Rute Laporan, dll)
+
+        // --- RUTE ROLE BARU ---
+        Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');
+        Route::post('/roles', [RoleController::class, 'store'])->name('roles.store');
+        Route::delete('/roles/{role}', [RoleController::class, 'destroy'])->name('roles.destroy');
+        // ----------------------
+        Route::resource('users', UserController::class);
     });
 });
 
