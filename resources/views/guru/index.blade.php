@@ -17,16 +17,25 @@
                     }">
 
                         <div class="flex justify-between items-center mb-4">
-                            <x-primary-button x-data=""
-                                x-on:click.prevent="$dispatch('open-modal', 'create-modal')">
-                                Tambah Guru
-                            </x-primary-button>
+                            <div>
+                                <x-primary-button x-data=""
+                                    x-on:click.prevent="$dispatch('open-modal', 'create-modal')">
+                                    Tambah Guru
+                                </x-primary-button>
 
-                            <x-secondary-button x-data=""
-                                x-on:click.prevent="$dispatch('open-modal', 'import-modal')"
-                                class="bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white dark:text-gray-100">
-                                Import Excel
-                            </x-secondary-button>
+                                <x-secondary-button x-data=""
+                                    x-on:click.prevent="$dispatch('open-modal', 'import-modal')"
+                                    class="bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white dark:text-gray-100">
+                                    Import Excel
+                                </x-secondary-button>
+                            </div>
+                            <form action="{{ route('guru.bulk-create') }}" method="POST"
+                                onsubmit="return confirm('Anda akan membuat akun untuk SEMUA guru yang belum memiliki akun (dan sudah memiliki email). Lanjutkan?');">
+                                @csrf
+                                <x-primary-button type="submit" class="bg-blue-600 hover:bg-blue-700">
+                                    Bulk Create Account
+                                </x-primary-button>
+                            </form>
                         </div>
 
                         <form action="{{ route('guru.index') }}" method="GET" class="mb-4">
@@ -81,6 +90,9 @@
                                             Nama</th>
                                         <th
                                             class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                            Email (Akun)</th>
+                                        <th
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                                             Mata Pelajaran</th>
                                         <th
                                             class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
@@ -92,6 +104,19 @@
                                         <tr>
                                             <td class="px-6 py-4 whitespace-nowrap">{{ $guru->nip }}</td>
                                             <td class="px-6 py-4 whitespace-nowrap">{{ $guru->nama_guru }}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                @if ($guru->user)
+                                                    <span
+                                                        class="font-bold text-green-600 dark:text-green-400">{{ $guru->user->email }}</span>
+                                                    (Terhubung)
+                                                @elseif ($guru->email)
+                                                    <span
+                                                        class="text-yellow-600 dark:text-yellow-400">{{ $guru->email }}</span>
+                                                    (Belum Dibuat Akun)
+                                                @else
+                                                    <span class="text-red-500 italic">(Email Kosong)</span>
+                                                @endif
+                                            </td>
                                             <td class="px-6 py-4 whitespace-nowrap">{{ $guru->mata_pelajaran }}</td>
                                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                 <x-secondary-button x-data=""
@@ -173,6 +198,12 @@
                                     <x-input-error :messages="$errors->get('nama_guru')" class="mt-2" />
                                 </div>
                                 <div class="mt-4">
+                                    <x-input-label for="email" value="Email (Untuk Akun Login)" />
+                                    <x-text-input id="email" name="email" type="email"
+                                        class="mt-1 block w-full" :value="old('email')" />
+                                    <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                                </div>
+                                <div class="mt-4">
                                     <x-input-label for="mata_pelajaran" value="Mata Pelajaran" />
                                     <x-text-input id="mata_pelajaran" name="mata_pelajaran" type="text"
                                         class="mt-1 block w-full" :value="old('mata_pelajaran')" required />
@@ -202,6 +233,12 @@
                                     <x-text-input id="edit_nama_guru" name="nama_guru" type="text"
                                         class="mt-1 block w-full" x-model="editData.nama_guru" required />
                                     <x-input-error :messages="$errors->get('nama_guru')" class="mt-2" />
+                                </div>
+                                <div class="mt-4">
+                                    <x-input-label for="edit_email" value="Email (Untuk Akun Login)" />
+                                    <x-text-input id="edit_email" name="email" type="email"
+                                        class="mt-1 block w-full" x-model="editData.email" />
+                                    <x-input-error :messages="$errors->get('email')" class="mt-2" />
                                 </div>
                                 <div class="mt-4">
                                     <x-input-label for="edit_mata_pelajaran" value="Mata Pelajaran" />

@@ -25,6 +25,7 @@ class GuruImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnFail
         return new Guru([
             'nip'             => $row['nip'],
             'nama_guru'       => $row['nama_guru'],
+            'email'           => $row['email'],
             'mata_pelajaran'  => $row['mata_pelajaran'],
         ]);
     }
@@ -40,6 +41,9 @@ class GuruImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnFail
 
             // 'nama_guru' harus diisi
             'nama_guru' => 'required|string|max:255',
+
+            // 'email' harus diisi
+            'email' => 'required|email|max:255',
 
             // 'mata_pelajaran' harus diisi
             'mata_pelajaran' => 'required|string|max:100',

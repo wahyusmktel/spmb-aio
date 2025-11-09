@@ -33,6 +33,8 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('guru', GuruController::class);
     Route::post('/guru/import', [GuruController::class, 'importExcel'])->name('guru.import');
+    Route::post('/guru/bulk-create-accounts', [GuruController::class, 'bulkCreateAccounts'])
+        ->name('guru.bulk-create');
 
     Route::resource('tahun-pelajaran', TahunPelajaranController::class);
 

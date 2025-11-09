@@ -10,6 +10,12 @@ use App\Imports\GuruImport; // <-- TAMBAHKAN INI
 use Maatwebsite\Excel\Facades\Excel; // <-- TAMBAHKAN INI
 use Maatwebsite\Excel\Validators\ValidationException; // <-- TAMBAHKAN INI
 
+use App\Models\User;
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
+
 class GuruController extends Controller
 {
     /**
@@ -43,6 +49,7 @@ class GuruController extends Controller
         $request->validate([
             'nip' => 'required|string|unique:gurus|max:20',
             'nama_guru' => 'required|string|max:255',
+            'email' => 'nullable|email|max:255|unique:gurus,email',
             'mata_pelajaran' => 'required|string|max:100',
         ]);
 
@@ -62,6 +69,7 @@ class GuruController extends Controller
         $request->validate([
             'nip' => 'required|string|max:20|unique:gurus,nip,' . $guru->id,
             'nama_guru' => 'required|string|max:255',
+            'email' => ['nullable', 'email', 'max:255', Rule::unique('gurus')->ignore($guru->id)], // <-- VALIDASI BARU
             'mata_pelajaran' => 'required|string|max:100',
         ]);
 
@@ -107,5 +115,65 @@ class GuruController extends Controller
             // Redirect kembali dengan pesan error validasi
             return redirect()->route('guru.index')->with('import_errors', $errorMessages);
         }
+    }
+
+    /**
+     * === METHOD BARU: BULK CREATE ACCOUNT ===
+     */
+    public function bulkCreateAccounts(Request $request)
+    {
+        // 1. Ambil semua guru yang BELUM punya user_id DAN SUDAH punya email
+        $gurusToCreate = Guru::whereNull('user_id')
+            ->whereNotNull('email')
+            ->get();
+
+        if ($gurusToCreate->isEmpty()) {
+            return redirect()->route('guru.index')->with('error', 'Tidak ada guru (dengan email) yang perlu dibuatkan akun.');
+        }
+
+        // 2. Siapkan role 'Guru'
+        $roleGuru = Role::firstOrCreate(['name' => 'Guru']);
+        $password = Hash::make('telkom1234'); // Password default
+
+        $createdCount = 0;
+        $skippedEmails = [];
+
+        // 3. Mulai Transaksi Database
+        DB::transaction(function () use ($gurusToCreate, $roleGuru, $password, &$createdCount, &$skippedEmails) {
+
+            foreach ($gurusToCreate as $guru) {
+                // 4. Cek apakah email sudah dipakai di tabel users
+                $emailExists = User::where('email', $guru->email)->exists();
+
+                if ($emailExists) {
+                    $skippedEmails[] = $guru->email;
+                    continue; // Lewati guru ini, lanjut ke guru berikutnya
+                }
+
+                // 5. Buat User baru
+                $newUser = User::create([
+                    'name' => $guru->nama_guru,
+                    'email' => $guru->email,
+                    'password' => $password,
+                ]);
+
+                // 6. Assign Role
+                $newUser->assignRole($roleGuru);
+
+                // 7. Link User ke Guru
+                $guru->update(['user_id' => $newUser->id]);
+
+                $createdCount++;
+            }
+        });
+
+        // 8. Siapkan pesan notifikasi
+        $message = $createdCount . ' akun guru berhasil dibuat dengan password default "telkom1234".';
+        if (!empty($skippedEmails)) {
+            $message .= ' | Gagal membuat ' . count($skippedEmails) . ' akun karena email sudah terdaftar: ' . implode(', ', $skippedEmails);
+            return redirect()->route('guru.index')->with('warning', $message);
+        }
+
+        return redirect()->route('guru.index')->with('success', $message);
     }
 }
