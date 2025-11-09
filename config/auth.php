@@ -40,6 +40,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'peserta' => [
+            'driver' => 'session',
+            'provider' => 'peserta_provider',
+        ],
     ],
 
     /*
@@ -63,6 +67,11 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', App\Models\User::class),
+        ],
+
+        'peserta_provider' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\ReferensiAkunCbt::class,
         ],
 
         // 'users' => [

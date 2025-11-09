@@ -40,7 +40,7 @@ class ReferensiAkunCbtImport implements ToModel, WithHeadingRow, WithValidation,
             'id_tahun_pelajaran' => $this->id_tahun_pelajaran,
             'username'           => $row['username'],
             'password'           => $row['password'],
-            'status'             => $row['status'] ?? false, // Default false jika kolom 'status' tidak ada
+            'status'             => $row['status'] ?? true, // Default false jika kolom 'status' tidak ada
         ]);
     }
 

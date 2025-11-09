@@ -71,6 +71,10 @@
                                     <x-dropdown-link :href="route('roles.index')" :active="request()->routeIs('roles.*')">
                                         Manajemen Role
                                     </x-dropdown-link>
+                                    <div class="border-t border-gray-200 dark:border-gray-600"></div>
+                                    <x-dropdown-link :href="route('soal-buta-warna.index')" :active="request()->routeIs('soal-buta-warna.*')">
+                                        Manajemen Soal Buta Warna
+                                    </x-dropdown-link>
                                 </x-slot>
                             </x-dropdown>
                         </div>

@@ -17,6 +17,9 @@ use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\AbsensiMandiriController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\SoalButaWarnaController;
+use App\Http\Controllers\PesertaLoginController;
+use App\Http\Controllers\PesertaDashboardController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -25,6 +28,20 @@ Route::get('/', function () {
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/seleksi/login', [PesertaLoginController::class, 'showLoginForm'])->name('peserta.login');
+Route::post('/seleksi/login', [PesertaLoginController::class, 'login']);
+Route::post('/seleksi/logout', [PesertaLoginController::class, 'logout'])->name('peserta.logout');
+
+// Gunakan middleware 'auth:peserta' (guard peserta)
+Route::middleware(['auth:peserta'])->group(function () {
+
+    Route::get('/seleksi/dashboard', [PesertaDashboardController::class, 'index'])
+        ->name('peserta.dashboard');
+
+    // (Nanti rute tes buta warna akan kita taruh di sini)
+
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -165,6 +182,8 @@ Route::middleware('auth')->group(function () {
         Route::delete('/roles/{role}', [RoleController::class, 'destroy'])->name('roles.destroy');
         // ----------------------
         Route::resource('users', UserController::class);
+
+        Route::resource('soal-buta-warna', SoalButaWarnaController::class);
     });
 });
 

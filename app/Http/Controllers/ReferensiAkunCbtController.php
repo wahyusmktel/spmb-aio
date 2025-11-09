@@ -30,7 +30,8 @@ class ReferensiAkunCbtController extends Controller
         $search = $request->input('search');
 
         // Ambil akun HANYA untuk tahun aktif tersebut
-        $referensiAkunCbt = ReferensiAkunCbt::where('id_tahun_pelajaran', $tahunAktif->id)
+        $referensiAkunCbt = ReferensiAkunCbt::with('pesertaSeleksi')
+            ->where('id_tahun_pelajaran', $tahunAktif->id)
             ->latest()
             ->when($search, function ($query, $search) {
                 $query->where('username', 'like', "%{$search}%");
