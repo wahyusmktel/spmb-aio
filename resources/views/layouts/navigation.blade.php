@@ -20,6 +20,16 @@
                             {{ __('Pengajuan Surat') }}
                         </x-nav-link>
                     @endrole
+                    @role('Kepala Sekolah')
+                        <x-nav-link :href="route('persetujuan.index')" :active="request()->routeIs('persetujuan.index')">
+                            {{ __('Persetujuan SPT') }}
+                        </x-nav-link>
+                    @endrole
+                    @role('Admin|Kepala Sekolah')
+                        <x-nav-link :href="route('laporan.peserta.index')" :active="request()->routeIs('laporan.peserta.index')">
+                            {{ __('Laporan Peserta') }}
+                        </x-nav-link>
+                    @endrole
                     @role('Admin')
                         <x-nav-link :href="route('guru.index')" :active="request()->routeIs('guru.index')">
                             {{ __('Data Guru') }}

@@ -11,6 +11,8 @@ use App\Http\Controllers\PesertaSeleksiController;
 use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\EvidenController;
 use App\Http\Controllers\PengajuanSuratController;
+use App\Http\Controllers\PersetujuanController;
+use App\Http\Controllers\LaporanController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -111,6 +113,25 @@ Route::middleware('auth')->group(function () {
             ->name('pengajuan.index');
         Route::post('/pengajuan-surat/{jadwal}/terbitkan', [PengajuanSuratController::class, 'terbitkan'])
             ->name('pengajuan.terbitkan');
+    });
+
+    Route::middleware(['role:Kepala Sekolah'])->group(function () {
+        Route::get('/persetujuan-spt', [PersetujuanController::class, 'index'])
+            ->name('persetujuan.index');
+        // Kita pakai POST untuk "menyetujui"
+        Route::post('/persetujuan-spt/{jadwal}/approve', [PersetujuanController::class, 'approve'])
+            ->name('persetujuan.approve');
+    });
+
+    Route::middleware(['role:Admin|Kepala Sekolah'])->group(function () {
+
+        // Halaman untuk menampilkan filter & preview
+        Route::get('/laporan/peserta', [LaporanController::class, 'indexPeserta'])
+            ->name('laporan.peserta.index');
+
+        // Rute untuk handle download PDF
+        Route::get('/laporan/peserta/download', [LaporanController::class, 'downloadPeserta'])
+            ->name('laporan.peserta.download');
     });
 });
 

@@ -29,7 +29,11 @@ class JadwalSeleksiController extends Controller
         $search = $request->input('search');
 
         // Ambil data users untuk dropdown (tetap perlu)
-        $users = User::select('id', 'name')->orderBy('name')->get();
+        // $users = User::select('id', 'name')->orderBy('name')->get();
+        $users = User::role('Kepala Sekolah')
+            ->select('id', 'name')
+            ->orderBy('name')
+            ->get();
 
         // Ambil jadwal HANYA untuk tahun aktif tersebut
         $jadwalSeleksis = JadwalSeleksi::with('penandatangan')
@@ -77,7 +81,7 @@ class JadwalSeleksiController extends Controller
         // Siapkan data create
         $data = $request->all();
         $data['id_tahun_pelajaran'] = $tahunAktif->id; // <-- INJECT TAHUN AKTIF
-        $data['status'] = 'menunggu'; // <-- STATUS BARU
+        $data['status'] = 'menunggu_nst'; // <-- STATUS BARU
         $data['nomor_surat_tugas'] = null; // <-- NST DIBUAT NULL
 
         JadwalSeleksi::create($data);
@@ -207,47 +211,55 @@ class JadwalSeleksiController extends Controller
     }
 
     /**
-     * === METHOD BARU UNTUK DOWNLOAD PDF BERITA ACARA (SUDAH DIVALIDASI) ===
+     * === DOWNLOAD PDF BERITA ACARA (VERSI BARU DENGAN STATS ABSENSI) ===
      */
     public function downloadBeritaAcara(JadwalSeleksi $jadwal)
     {
         // 1. Ambil data jadwal
         $jadwal->load('tahunPelajaran', 'penandatangan');
 
-        // 2. Ambil semua PETUGAS
+        // 2. Ambil KOLEKSI PETUGAS
         $petugas = PenugasanPetugas::with('guru', 'referensiTugas')
             ->where('id_jadwal_seleksi', $jadwal->id)
             ->get()
             ->sortBy(fn($p) => $p->guru->nama_guru);
 
-        // 3. Ambil semua PESERTA (kita butuh jumlahnya)
-        $jumlahPeserta = PesertaSeleksi::where('id_jadwal_seleksi', $jadwal->id)->count();
+        // 3. Ambil KOLEKSI PESERTA (Bukan cuma count)
+        $peserta = PesertaSeleksi::where('id_jadwal_seleksi', $jadwal->id)->get();
 
-        // --- VALIDASI BARU ---
-        // 4. Cek apakah salah satunya kosong
-        if ($petugas->isEmpty() || $jumlahPeserta == 0) {
+        // 4. VALIDASI (yang kita perbaiki di langkah sebelumnya)
+        // Pastikan keduanya tidak kosong
+        if ($petugas->isEmpty() || $peserta->isEmpty()) {
             $errors = [];
-            if ($petugas->isEmpty()) {
-                $errors[] = 'Data Petugas masih kosong.';
-            }
-            if ($jumlahPeserta == 0) {
-                $errors[] = 'Data Peserta masih kosong.';
-            }
+            if ($petugas->isEmpty()) $errors[] = 'Data Petugas masih kosong.';
+            if ($peserta->isEmpty()) $errors[] = 'Data Peserta masih kosong.';
 
             $errorMessage = 'Gagal cetak Berita Acara: ' . implode(' ', $errors);
 
-            // Redirect kembali ke halaman jadwal seleksi dengan pesan error
             return redirect()->route('jadwal-seleksi.index')->with('error', $errorMessage);
         }
-        // --- END VALIDASI ---
 
-        // 5. Load view PDF
-        $pdf = Pdf::loadView('downloads.berita-acara', compact('jadwal', 'petugas', 'jumlahPeserta'));
+        // 5. HITUNG STATISTIK PESERTA (BARU)
+        $statsPeserta = [
+            'total' => $peserta->count(),
+            'hadir' => $peserta->where('kehadiran', true)->count(),
+            'tidak_hadir' => $peserta->where('kehadiran', false)->count(),
+        ];
 
-        // 6. Set ukuran kertas A4
+        // 6. HITUNG STATISTIK PETUGAS (BARU)
+        $statsPetugas = [
+            'total' => $petugas->count(),
+            'hadir' => $petugas->where('kehadiran', true)->count(),
+            'tidak_hadir' => $petugas->where('kehadiran', false)->count(),
+        ];
+
+        // 7. Load view PDF (Kirim stats baru, bukan $jumlahPeserta)
+        $pdf = Pdf::loadView('downloads.berita-acara', compact('jadwal', 'petugas', 'statsPeserta', 'statsPetugas'));
+
+        // 8. Set ukuran kertas A4
         $pdf->setPaper('a4', 'portrait');
 
-        // 7. Stream ke browser
+        // 9. Stream ke browser
         $namaFile = 'berita_acara_' . $jadwal->judul_kegiatan . '.pdf';
         return $pdf->stream($namaFile);
     }

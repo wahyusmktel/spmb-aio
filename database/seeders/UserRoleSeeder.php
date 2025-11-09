@@ -19,6 +19,7 @@ class UserRoleSeeder extends Seeder
         // Method firstOrCreate() akan mencari role, jika tidak ada, baru dibuat.
         $roleAdmin = Role::firstOrCreate(['name' => 'Admin']);
         $roleStaffTU = Role::firstOrCreate(['name' => 'Staff TU']);
+        $roleKepsek = Role::firstOrCreate(['name' => 'Kepala Sekolah']);
 
         // 2. Jadikan User pertama (ID=1) sebagai Admin
         // Kita asumsikan user pertama yang terdaftar (mungkin kamu) adalah Admin.
@@ -50,5 +51,12 @@ class UserRoleSeeder extends Seeder
 
         // Assign role Staff TU
         $staffUser->assignRole($roleStaffTU);
+
+        // 4. Buat Kepala Sekolah <-- TAMBAHKAN BLOK INI
+        $kepsekUser = User::updateOrCreate(
+            ['email' => 'kepsek@gmail.com'],
+            ['name' => 'Kepala Sekolah', 'password' => Hash::make('password123')]
+        );
+        $kepsekUser->assignRole($roleKepsek);
     }
 }

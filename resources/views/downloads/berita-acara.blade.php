@@ -5,66 +5,54 @@
     <meta charset="utf-8">
     <title>Berita Acara Pelaksanaan</title>
     <style>
-        /* CSS WAJIB untuk DOMPDF */
+        /* (CSS tidak berubah) */
         @page {
-            margin: 40px;
-            /* Margin halaman A4 */
+            margin: 40px 50px;
         }
 
         body {
             font-family: 'Helvetica', 'Arial', sans-serif;
             font-size: 12px;
             color: #000;
-            line-height: 1.5;
+            line-height: 1.6;
         }
 
-        /* KOP SURAT */
         .kop-surat {
             width: 100%;
             border-bottom: 2px solid #000;
             padding-bottom: 10px;
             margin-bottom: 30px;
-        }
-
-        .kop-surat td {
-            vertical-align: top;
-        }
-
-        .kop-surat .judul-kop {
             text-align: center;
-            line-height: 1.4;
         }
 
-        .kop-surat .judul-kop h1 {
+        .kop-surat h1 {
             font-size: 18px;
             font-weight: bold;
             margin: 0;
         }
 
-        .kop-surat .judul-kop p {
+        .kop-surat p {
             font-size: 12px;
             margin: 0;
         }
 
-        /* JUDUL UTAMA */
-        .judul-utama {
+        .judul-surat {
             text-align: center;
             margin-bottom: 30px;
         }
 
-        .judul-utama h2 {
+        .judul-surat h2 {
             font-size: 16px;
             font-weight: bold;
             margin: 0;
             text-decoration: underline;
         }
 
-        .judul-utama p {
+        .judul-surat p {
             font-size: 14px;
             margin: 5px 0 0 0;
         }
 
-        /* ISI BERITA ACARA */
         .isi-ba p {
             text-align: justify;
             margin-bottom: 15px;
@@ -80,8 +68,8 @@
         }
 
         .info-kegiatan td.label {
-            width: 180px;
-            /* Lebar label */
+            width: 200px;
+            /* Lebar label disesuaikan */
             vertical-align: top;
         }
 
@@ -90,7 +78,6 @@
             vertical-align: top;
         }
 
-        /* TABEL SAKSI/PETUGAS */
         .tabel-saksi {
             width: 100%;
             border-collapse: collapse;
@@ -118,18 +105,15 @@
             text-align: center;
         }
 
-        /* TANDA TANGAN PENANGGUNG JAWAB */
         .signature-block {
             width: 300px;
             margin-top: 40px;
             margin-left: 60%;
-            /* Posisi di kanan */
             text-align: left;
         }
 
         .signature-block .kota-tanggal {
             margin-bottom: 80px;
-            /* Jarak untuk TTD */
         }
 
         .signature-block .nama {
@@ -141,16 +125,11 @@
 
 <body>
 
-    <table class="kop-surat">
-        <tr>
-            <td class="judul-kop">
-                <h1>PANITIA PELAKSANA SELEKSI</h1>
-                <h2>(NAMA INSTANSI ANDA)</h2>
-                <p>Tahun Pelajaran {{ $jadwal->tahunPelajaran->nama_tahun_pelajaran ?? 'N/A' }}</p>
-                <p>Alamat: Jl. Instansi No. 123, Kota Anda - Email: info@instansi.com</p>
-            </td>
-        </tr>
-    </table>
+    <div class="kop-surat">
+        <h1>PANITIA PELAKSANA SELEKSI</h1>
+        <p><strong>(NAMA INSTANSI ANDA)</strong></p>
+        <p>Tahun Pelajaran {{ $jadwal->tahunPelajaran->nama_tahun_pelajaran ?? 'N/A' }}</p>
+    </div>
 
     <div class="judul-utama">
         <h2>BERITA ACARA PELAKSANAAN</h2>
@@ -174,31 +153,50 @@
                 <td><strong>{{ $jadwal->judul_kegiatan }}</strong></td>
             </tr>
             <tr>
+                <td class="label">Lokasi</td>
+                <td class="separator">:</td>
+                <td>{{ $jadwal->lokasi_kegiatan }}</td>
+            </tr>
+            <tr>
                 <td class="label">Waktu Pelaksanaan</td>
                 <td class="separator">:</td>
                 <td>{{ \Carbon\Carbon::parse($jadwal->tanggal_mulai_pelaksanaan)->isoFormat('D MMMM YYYY, H:mm') }} s/d
                     {{ \Carbon\Carbon::parse($jadwal->tanggal_akhir_pelaksanaan)->isoFormat('D MMMM YYYY, H:mm') }}</td>
             </tr>
             <tr>
-                <td class="label">Lokasi</td>
-                <td class="separator">:</td>
-                <td>{{ $jadwal->lokasi_kegiatan }}</td>
-            </tr>
-            <tr>
                 <td class="label">Jumlah Peserta Terdaftar</td>
                 <td class="separator">:</td>
-                <td>{{ $jumlahPeserta }} orang</td>
+                <td><strong>{{ $statsPeserta['total'] }} orang</strong></td>
             </tr>
             <tr>
-                <td class="label">Jumlah Petugas Hadir</td>
+                <td class="label" style="padding-left: 15px;">&bull; Jumlah Peserta Hadir</td>
                 <td class="separator">:</td>
-                <td>{{ $petugas->count() }} orang</td>
+                <td>{{ $statsPeserta['hadir'] }} orang</td>
+            </tr>
+            <tr>
+                <td class="label" style="padding-left: 15px;">&bull; Jumlah Peserta Tidak Hadir</td>
+                <td class="separator">:</td>
+                <td>{{ $statsPeserta['tidak_hadir'] }} orang</td>
+            </tr>
+            <tr>
+                <td class="label">Jumlah Petugas Terdaftar</td>
+                <td class="separator">:</td>
+                <td><strong>{{ $statsPetugas['total'] }} orang</strong></td>
+            </tr>
+            <tr>
+                <td class="label" style="padding-left: 15px;">&bull; Jumlah Petugas Hadir</td>
+                <td class="separator">:</td>
+                <td>{{ $statsPetugas['hadir'] }} orang</td>
+            </tr>
+            <tr>
+                <td class="label" style="padding-left: 15px;">&bull; Jumlah Petugas Tidak Hadir</td>
+                <td class="separator">:</td>
+                <td>{{ $statsPetugas['tidak_hadir'] }} orang</td>
             </tr>
         </table>
-
         <p>
             Pelaksanaan kegiatan seleksi berjalan dengan lancar dan tertib. Seluruh rangkaian acara telah dilaksanakan
-            sesuai dengan prosedur yang berlaku tanpa ada kendala teknis maupun non-teknis yang berarti.
+            sesuai dengan prosedur yang berlaku.
         </p>
         <p>
             Demikian Berita Acara ini dibuat dengan sesungguhnya untuk dapat dipergunakan sebagaimana mestinya.
@@ -213,7 +211,7 @@
                 <th>No.</th>
                 <th>Nama Petugas</th>
                 <th>Peran / Tugas</th>
-                <th style="width: 200px;">Tanda Tangan</th>
+                <th style="width: 200px;">Status Kehadiran</th>
             </tr>
         </thead>
         <tbody>
@@ -222,8 +220,12 @@
                     <td class="nomor">{{ $loop->iteration }}</td>
                     <td>{{ $p->guru->nama_guru ?? 'N/A' }}</td>
                     <td>{{ $p->referensiTugas->deskripsi_tugas ?? 'N/A' }}</td>
-                    <td class="ttd">
-                        {{ $loop->iteration }}.
+                    <td style="text-align: center; font-weight: bold;">
+                        @if ($p->kehadiran)
+                            <span style="color: green;">HADIR</span>
+                        @else
+                            <span style="color: red;">TIDAK HADIR</span>
+                        @endif
                     </td>
                 </tr>
             @endforeach

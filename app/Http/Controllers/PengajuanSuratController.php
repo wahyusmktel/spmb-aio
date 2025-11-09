@@ -12,7 +12,7 @@ class PengajuanSuratController extends Controller
      */
     public function index()
     {
-        $pengajuan = JadwalSeleksi::where('status', 'menunggu')
+        $pengajuan = JadwalSeleksi::where('status', 'menunggu_nst')
             ->with('tahunPelajaran')
             ->latest()
             ->paginate(10);
@@ -25,20 +25,19 @@ class PengajuanSuratController extends Controller
      */
     public function terbitkan(Request $request, JadwalSeleksi $jadwal)
     {
-        // Validasi input NST dari Staff TU
         $request->validate([
             'nomor_surat_tugas' => 'required|string|max:255',
         ]);
 
         $request->request->add(['form_type' => 'terbitkan']);
 
-        // Update jadwalnya
+        // PERUBAHAN DI SINI
         $jadwal->update([
             'nomor_surat_tugas' => $request->nomor_surat_tugas,
-            'status' => 'diterbitkan',
-            'published_by_user_id' => auth()->id(), // Catat siapa yang nerbitin
+            'status' => 'menunggu_acc', // Ganti jadi 'menunggu_acc'
+            'published_by_user_id' => auth()->id(),
         ]);
 
-        return redirect()->route('pengajuan.index')->with('success', 'Nomor Surat Tugas berhasil diterbitkan.');
+        return redirect()->route('pengajuan.index')->with('success', 'Nomor Surat berhasil diterbitkan dan diteruskan ke Kepala Sekolah.');
     }
 }
