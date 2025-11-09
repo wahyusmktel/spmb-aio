@@ -44,6 +44,8 @@ Route::middleware('auth')->group(function () {
         ->name('jadwal.download-berita-acara');
     Route::get('/jadwal-seleksi/{jadwal}/download-spt', [JadwalSeleksiController::class, 'downloadSPT'])
         ->name('jadwal.download-spt');
+    Route::get('/jadwal-seleksi/{jadwal}/download-laporan-kegiatan', [JadwalSeleksiController::class, 'downloadLaporanKegiatan'])
+        ->name('jadwal.download-laporan-kegiatan');
 
     Route::resource('referensi-tugas', ReferensiTugasController::class);
 
@@ -132,6 +134,11 @@ Route::middleware('auth')->group(function () {
         // Rute untuk handle download PDF
         Route::get('/laporan/peserta/download', [LaporanController::class, 'downloadPeserta'])
             ->name('laporan.peserta.download');
+
+        Route::get('/laporan/petugas', [LaporanController::class, 'indexPetugas'])
+            ->name('laporan.petugas.index');
+        Route::get('/laporan/petugas/download', [LaporanController::class, 'downloadPetugas'])
+            ->name('laporan.petugas.download');
     });
 });
 

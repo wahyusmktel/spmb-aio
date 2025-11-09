@@ -29,6 +29,9 @@
                         <x-nav-link :href="route('laporan.peserta.index')" :active="request()->routeIs('laporan.peserta.index')">
                             {{ __('Laporan Peserta') }}
                         </x-nav-link>
+                        <x-nav-link :href="route('laporan.petugas.index')" :active="request()->routeIs('laporan.petugas.index')">
+                            {{ __('Laporan Petugas') }}
+                        </x-nav-link>
                     @endrole
                     @role('Admin')
                         <x-nav-link :href="route('guru.index')" :active="request()->routeIs('guru.index')">

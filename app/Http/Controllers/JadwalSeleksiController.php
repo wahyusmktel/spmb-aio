@@ -294,4 +294,65 @@ class JadwalSeleksiController extends Controller
         $namaFile = 'SPT_' . $jadwal->judul_kegiatan . '.pdf';
         return $pdf->stream($namaFile);
     }
+
+    /**
+     * === METHOD BARU: DOWNLOAD LAPORAN KEGIATAN LENGKAP ===
+     */
+    public function downloadLaporanKegiatan(JadwalSeleksi $jadwal)
+    {
+        // 1. Ambil data jadwal
+        $jadwal->load('tahunPelajaran', 'penandatangan');
+
+        // 2. Ambil KOLEKSI PETUGAS
+        $petugas = PenugasanPetugas::with('guru', 'referensiTugas')
+            ->where('id_jadwal_seleksi', $jadwal->id)
+            ->get()
+            ->sortBy(fn($p) => $p->guru->nama_guru);
+
+        // 3. Ambil KOLEKSI PESERTA
+        $peserta = PesertaSeleksi::with('akunCbt')
+            ->where('id_jadwal_seleksi', $jadwal->id)
+            ->get()
+            ->sortBy('nama_pendaftar');
+
+        // 4. VALIDASI (PENTING)
+        if ($petugas->isEmpty() || $peserta->isEmpty()) {
+            $errors = [];
+            if ($petugas->isEmpty()) $errors[] = 'Data Petugas masih kosong.';
+            if ($peserta->isEmpty()) $errors[] = 'Data Peserta masih kosong.';
+            $errorMessage = 'Gagal cetak Laporan: ' . implode(' ', $errors);
+
+            return redirect()->route('jadwal-seleksi.index')->with('error', $errorMessage);
+        }
+
+        // 5. HITUNG STATISTIK PESERTA
+        $statsPeserta = [
+            'total' => $peserta->count(),
+            'hadir' => $peserta->where('kehadiran', true)->count(),
+            'tidak_hadir' => $peserta->where('kehadiran', false)->count(),
+        ];
+
+        // 6. HITUNG STATISTIK PETUGAS
+        $statsPetugas = [
+            'total' => $petugas->count(),
+            'hadir' => $petugas->where('kehadiran', true)->count(),
+            'tidak_hadir' => $petugas->where('kehadiran', false)->count(),
+        ];
+
+        // 7. Load view PDF
+        $pdf = Pdf::loadView('downloads.laporan-kegiatan', compact(
+            'jadwal',
+            'petugas',
+            'peserta',
+            'statsPeserta',
+            'statsPetugas'
+        ));
+
+        // 8. Set ukuran kertas A4
+        $pdf->setPaper('a4', 'portrait');
+
+        // 9. Stream ke browser
+        $namaFile = 'Laporan_Kegiatan_' . $jadwal->judul_kegiatan . '.pdf';
+        return $pdf->stream($namaFile);
+    }
 }

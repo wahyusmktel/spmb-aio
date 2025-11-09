@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Rekapitulasi Laporan Peserta') }}
+            {{ __('Rekapitulasi Laporan Petugas') }}
         </h2>
     </x-slot>
 
@@ -21,7 +21,7 @@
                         Pilih filter berdasarkan **Kegiatan** (prioritas) ATAU berdasarkan **Rentang Waktu**.
                     </p>
 
-                    <form action="{{ route('laporan.peserta.index') }}" method="GET">
+                    <form action="{{ route('laporan.petugas.index') }}" method="GET">
                         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
 
                             <div class="md:col-span-2">
@@ -61,7 +61,7 @@
 
                     <h3 class="text-lg font-medium mb-4">Unduh Laporan</h3>
                     <div class="flex space-x-4">
-                        <form action="{{ route('laporan.peserta.download') }}" method="GET" target="_blank">
+                        <form action="{{ route('laporan.petugas.download') }}" method="GET" target="_blank">
                             <input type="hidden" name="id_jadwal_seleksi" value="{{ $id_jadwal_seleksi ?? '' }}">
                             <input type="hidden" name="tanggal_mulai" value="{{ $tanggal_mulai ?? '' }}">
                             <input type="hidden" name="tanggal_akhir" value="{{ $tanggal_akhir ?? '' }}">
@@ -71,7 +71,7 @@
                             </x-primary-button>
                         </form>
 
-                        <a href="{{ route('laporan.peserta.download') }}" target="_blank"
+                        <a href="{{ route('laporan.petugas.download') }}" target="_blank"
                             class="inline-flex items-center px-4 py-2 bg-gray-800 ...">
                             Download Semua (Tanpa Filter)
                         </a>
@@ -79,28 +79,38 @@
                 </div>
             </div>
 
-            @if (isset($peserta))
+            @if (isset($petugas))
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900 dark:text-gray-100">
-                        <h3 class="text-lg font-medium mb-4">Preview Data ({{ $stats['total'] }} Peserta Ditemukan)
+                        <h3 class="text-lg font-medium mb-4">Preview Data ({{ $stats['total'] }} Petugas Ditemukan)
                         </h3>
                         <div class="mb-4 flex space-x-4">
                             <span class="px-2 py-1 text-sm ...">Hadir: {{ $stats['hadir'] }}</span>
                             <span class="px-2 py-1 text-sm ...">Tidak Hadir: {{ $stats['tidak_hadir'] }}</span>
                         </div>
+
                         <div class="overflow-x-auto">
-                            <table class="min-w-full ...">
+                            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                                <thead class="bg-gray-50 dark:bg-gray-700">
+                                    <tr>
+                                        <th class="px-6 py-3 ... uppercase">No</th>
+                                        <th class="px-6 py-3 ... uppercase">Kegiatan</th>
+                                        <th class="px-6 py-3 ... uppercase">Nama Petugas</th>
+                                        <th class="px-6 py-3 ... uppercase">Jabatan</th>
+                                        <th class="px-6 py-3 ... uppercase">Peran Tugas</th>
+                                        <th class="px-6 py-3 ... uppercase">Status Hadir</th>
+                                    </tr>
+                                </thead>
                                 <tbody class="bg-white dark:bg-gray-800 ...">
-                                    @forelse ($peserta as $p)
+                                    @forelse ($petugas as $p)
                                         <tr>
                                             <td class="px-6 py-4 ...">{{ $loop->iteration }}</td>
                                             <td class="px-6 py-4 ...">{{ $p->jadwalSeleksi->judul_kegiatan ?? 'N/A' }}
                                             </td>
+                                            <td class="px-6 py-4 ...">{{ $p->guru->nama_guru ?? 'N/A' }}</td>
+                                            <td class="px-6 py-4 ...">{{ $p->guru->mata_pelajaran ?? 'N/A' }}</td>
                                             <td class="px-6 py-4 ...">
-                                                {{ $p->jadwalSeleksi->tahunPelajaran->nama_tahun_pelajaran ?? 'N/A' }}
-                                            </td>
-                                            <td class="px-6 py-4 ...">{{ $p->nomor_pendaftaran }}</td>
-                                            <td class="px-6 py-4 ...">{{ $p->nama_pendaftar }}</td>
+                                                {{ $p->referensiTugas->deskripsi_tugas ?? 'N/A' }}</td>
                                             <td class="px-6 py-4 ...">
                                                 @if ($p->kehadiran)
                                                     <span
@@ -113,7 +123,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="6" class="px-6 py-4 text-center">Tidak ada data peserta
+                                            <td colspan="6" class="px-6 py-4 text-center">Tidak ada data petugas
                                                 untuk kriteria yang dipilih.</td>
                                         </tr>
                                     @endforelse

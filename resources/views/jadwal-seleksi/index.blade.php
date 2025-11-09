@@ -203,6 +203,16 @@
                                                                     )" target="_blank">
                                                                         Download Surat Tugas
                                                                     </x-dropdown-link>
+                                                                    <div
+                                                                        class="border-t border-gray-200 dark:border-gray-600">
+                                                                    </div>
+
+                                                                    <x-dropdown-link :href="route(
+                                                                        'jadwal.download-laporan-kegiatan',
+                                                                        $jadwal->id,
+                                                                    )" target="_blank">
+                                                                        Download Laporan Kegiatan
+                                                                    </x-dropdown-link>
                                                                 </x-slot>
                                                             </x-dropdown>
                                                         </div>
