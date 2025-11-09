@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class PesertaSeleksi extends Model
 {
@@ -17,11 +18,14 @@ class PesertaSeleksi extends Model
         'nama_pendaftar',
         'nomor_telepon',
         'kehadiran',
+        'status_tes_buta_warna', // <-- TAMBAHKAN INI
+        'nilai_tes_buta_warna', // <-- TAMBAHKAN INI
     ];
 
     // TAMBAHKAN/UPDATE $casts INI
     protected $casts = [
         'kehadiran' => 'boolean',
+        'status_tes_buta_warna' => 'boolean', // <-- TAMBAHKAN INI
     ];
 
     // Relasi ke Jadwal
@@ -34,5 +38,11 @@ class PesertaSeleksi extends Model
     public function akunCbt(): BelongsTo
     {
         return $this->belongsTo(ReferensiAkunCbt::class, 'id_akun_cbt');
+    }
+
+    // <-- TAMBAHKAN RELASI INI -->
+    public function hasilButaWarna(): HasMany
+    {
+        return $this->hasMany(HasilButaWarna::class, 'peserta_seleksi_id');
     }
 }

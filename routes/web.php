@@ -20,6 +20,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\SoalButaWarnaController;
 use App\Http\Controllers\PesertaLoginController;
 use App\Http\Controllers\PesertaDashboardController;
+use App\Http\Controllers\TesButaWarnaController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -38,6 +39,20 @@ Route::middleware(['auth:peserta'])->group(function () {
 
     Route::get('/seleksi/dashboard', [PesertaDashboardController::class, 'index'])
         ->name('peserta.dashboard');
+
+    // --- RUTE TES BUTA WARNA ---
+    // Halaman "Mulai" atau "Lihat Hasil"
+    Route::get('/seleksi/tes-buta-warna', [TesButaWarnaController::class, 'index'])
+        ->name('tes-buta-warna.index');
+
+    // Halaman Pengerjaan Soal
+    Route::get('/seleksi/tes-buta-warna/kerjakan', [TesButaWarnaController::class, 'kerjakan'])
+        ->name('tes-buta-warna.kerjakan');
+
+    // Halaman Submit Jawaban
+    Route::post('/seleksi/tes-buta-warna/submit', [TesButaWarnaController::class, 'submit'])
+        ->name('tes-buta-warna.submit');
+    // ----------------------------
 
     // (Nanti rute tes buta warna akan kita taruh di sini)
 

@@ -42,9 +42,11 @@
                                 sesuai input admin) dan hanya dapat dikerjakan satu kali.
                             </p>
                             <div class="mt-4">
-                                <x-primary-button class="bg-green-600 hover:bg-green-700">
-                                    Mulai Kerjakan Tes
-                                </x-primary-button>
+                                <a href="{{ route('tes-buta-warna.index') }}">
+                                    <x-primary-button class="bg-green-600 hover:bg-green-700">
+                                        Mulai Kerjakan Tes
+                                    </x-primary-button>
+                                </a>
                             </div>
                         </div>
                     @else
