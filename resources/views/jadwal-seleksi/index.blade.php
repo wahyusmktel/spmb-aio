@@ -306,12 +306,30 @@
                                                                 </x-slot>
 
                                                                 <x-slot name="content">
+                                                                    @role('Admin')
+                                                                        <x-dropdown-link :href="route(
+                                                                            'jadwal-tpa-setting.index',
+                                                                            $jadwal->id,
+                                                                        )">
+                                                                            Setting Soal TPA
+                                                                        </x-dropdown-link>
+                                                                        <div
+                                                                            class="border-t border-gray-200 dark:border-gray-600">
+                                                                        </div>
+                                                                    @endrole
                                                                     <x-dropdown-link :href="route(
                                                                         'jadwal.download-hasil-seleksi',
                                                                         $jadwal->id,
                                                                     )"
                                                                         target="_blank">
                                                                         Hasil Tes Buta Warna
+                                                                    </x-dropdown-link>
+                                                                    <x-dropdown-link :href="route(
+                                                                        'jadwal.download-hasil-tpa',
+                                                                        $jadwal->id,
+                                                                    )"
+                                                                        target="_blank">
+                                                                        Hasil Tes TPA
                                                                     </x-dropdown-link>
                                                                 </x-slot>
                                                             </x-dropdown>

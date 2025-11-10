@@ -75,6 +75,14 @@
                                     <x-dropdown-link :href="route('soal-buta-warna.index')" :active="request()->routeIs('soal-buta-warna.*')">
                                         Manajemen Soal Buta Warna
                                     </x-dropdown-link>
+                                    <div class="border-t border-gray-200 dark:border-gray-600"></div>
+
+                                    <x-dropdown-link :href="route('tpa-grup-soal.index')" :active="request()->routeIs('tpa-grup-soal.*')">
+                                        Manajemen Grup Soal TPA
+                                    </x-dropdown-link>
+                                    <x-dropdown-link :href="route('tpa-soal.index')" :active="request()->routeIs('tpa-soal.*')">
+                                        Manajemen Soal TPA
+                                    </x-dropdown-link>
                                 </x-slot>
                             </x-dropdown>
                         </div>

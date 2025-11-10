@@ -20,12 +20,15 @@ class PesertaSeleksi extends Model
         'kehadiran',
         'status_tes_buta_warna', // <-- TAMBAHKAN INI
         'nilai_tes_buta_warna', // <-- TAMBAHKAN INI
+        'status_tes_tpa', // <-- TAMBAHKAN
+        'nilai_tes_tpa', // <-- TAMBAHKAN
     ];
 
     // TAMBAHKAN/UPDATE $casts INI
     protected $casts = [
         'kehadiran' => 'boolean',
         'status_tes_buta_warna' => 'boolean', // <-- TAMBAHKAN INI
+        'status_tes_tpa' => 'boolean', // <-- TAMBAHKAN
     ];
 
     // Relasi ke Jadwal
@@ -44,5 +47,10 @@ class PesertaSeleksi extends Model
     public function hasilButaWarna(): HasMany
     {
         return $this->hasMany(HasilButaWarna::class, 'peserta_seleksi_id');
+    }
+
+    public function hasilTpa(): HasMany
+    {
+        return $this->hasMany(HasilTpa::class, 'peserta_seleksi_id');
     }
 }

@@ -387,4 +387,25 @@ class JadwalSeleksiController extends Controller
         $namaFile = 'Hasil_Seleksi_' . $jadwal->judul_kegiatan . '.pdf';
         return $pdf->stream($namaFile);
     }
+
+    /**
+     * === METHOD BARU: DOWNLOAD LAPORAN HASIL TPA ===
+     */
+    public function downloadHasilTpa(JadwalSeleksi $jadwal)
+    {
+        $jadwal->load('tahunPelajaran', 'penandatangan');
+
+        $peserta = PesertaSeleksi::with('akunCbt')
+            ->where('id_jadwal_seleksi', $jadwal->id)
+            ->get()
+            ->sortBy('nama_pendaftar');
+
+        if ($peserta->isEmpty()) {
+            return redirect()->route('jadwal-seleksi.index')->with('error', 'Gagal cetak hasil: Belum ada peserta di jadwal ini.');
+        }
+
+        $pdf = Pdf::loadView('downloads.hasil-seleksi-tpa', compact('jadwal', 'peserta'));
+        $pdf->setPaper('a4', 'portrait');
+        return $pdf->stream('Hasil_Seleksi_TPA_' . $jadwal->judul_kegiatan . '.pdf');
+    }
 }

@@ -49,6 +49,21 @@
                                 </a>
                             </div>
                         </div>
+
+                        <div class="mt-6 p-6 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                            <h4 class="text-lg font-semibold">Tes Potensi Akademik (TPA)</h4>
+                            <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                                Tes ini terdiri dari beberapa grup soal (Logika, Verbal, dll.).
+                                Tes ini hanya dapat dikerjakan satu kali.
+                            </p>
+                            <div class="mt-4">
+                                <a href="{{ route('tes-tpa.index') }}">
+                                    <x-primary-button class="bg-blue-600 hover:bg-blue-700">
+                                        Mulai Kerjakan Tes TPA
+                                    </x-primary-button>
+                                </a>
+                            </div>
+                        </div>
                     @else
                         <h3 class="text-2xl font-bold text-red-600">Akun Belum Aktif</h3>
                         <p class="mt-1 text-gray-600 dark:text-gray-400">

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo; // <-- Tambahkan ini
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class JadwalSeleksi extends Model
 {
@@ -65,5 +66,15 @@ class JadwalSeleksi extends Model
     public function pesertaSeleksi(): HasMany
     {
         return $this->hasMany(PesertaSeleksi::class, 'id_jadwal_seleksi');
+    }
+
+    /**
+     * Grup Soal TPA apa saja yang ditugaskan di jadwal ini.
+     */
+    public function tpaGrupSoals(): BelongsToMany
+    {
+        return $this->belongsToMany(TpaGrupSoal::class, 'jadwal_tpa_settings', 'jadwal_seleksi_id', 'tpa_grup_soal_id')
+            ->withTimestamps()
+            ->orderBy('urutan'); // (Jika pakai 'urutan')
     }
 }

@@ -21,6 +21,10 @@ use App\Http\Controllers\SoalButaWarnaController;
 use App\Http\Controllers\PesertaLoginController;
 use App\Http\Controllers\PesertaDashboardController;
 use App\Http\Controllers\TesButaWarnaController;
+use App\Http\Controllers\TpaGrupSoalController;
+use App\Http\Controllers\TpaSoalController;
+use App\Http\Controllers\JadwalTpaSettingController;
+use App\Http\Controllers\TesTpaController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -54,6 +58,20 @@ Route::middleware(['auth:peserta'])->group(function () {
         ->name('tes-buta-warna.submit');
     // ----------------------------
 
+    // --- RUTE TES TPA BARU ---
+    // Halaman "Mulai" atau "Lihat Hasil"
+    Route::get('/seleksi/tes-tpa', [TesTpaController::class, 'index'])
+        ->name('tes-tpa.index');
+
+    // Halaman Pengerjaan Soal (Halaman CBT Utama)
+    Route::get('/seleksi/tes-tpa/kerjakan', [TesTpaController::class, 'kerjakan'])
+        ->name('tes-tpa.kerjakan');
+
+    // Halaman Submit Jawaban
+    Route::post('/seleksi/tes-tpa/submit', [TesTpaController::class, 'submit'])
+        ->name('tes-tpa.submit');
+    // ----------------------------
+
     // (Nanti rute tes buta warna akan kita taruh di sini)
 
 });
@@ -85,6 +103,8 @@ Route::middleware('auth')->group(function () {
         ->name('jadwal.download-laporan-kegiatan');
     Route::get('/jadwal-seleksi/{jadwal}/download-hasil-seleksi', [JadwalSeleksiController::class, 'downloadHasilSeleksi'])
         ->name('jadwal.download-hasil-seleksi');
+    Route::get('/jadwal-seleksi/{jadwal}/download-hasil-tpa', [JadwalSeleksiController::class, 'downloadHasilTpa'])
+        ->name('jadwal.download-hasil-tpa');
 
     Route::resource('referensi-tugas', ReferensiTugasController::class);
 
@@ -201,6 +221,18 @@ Route::middleware('auth')->group(function () {
         Route::resource('users', UserController::class);
 
         Route::resource('soal-buta-warna', SoalButaWarnaController::class);
+
+        // --- RUTE BARU GRUP TPA ---
+        Route::resource('tpa-grup-soal', TpaGrupSoalController::class);
+
+        Route::resource('tpa-soal', TpaSoalController::class);
+
+        // --- RUTE BARU SETTING TPA PER JADWAL ---
+        Route::get('/jadwal-seleksi/{jadwal}/setting-tpa', [JadwalTpaSettingController::class, 'index'])
+            ->name('jadwal-tpa-setting.index');
+        Route::post('/jadwal-seleksi/{jadwal}/setting-tpa', [JadwalTpaSettingController::class, 'sync'])
+            ->name('jadwal-tpa-setting.sync');
+        // ----------------------------------------
     });
 });
 
