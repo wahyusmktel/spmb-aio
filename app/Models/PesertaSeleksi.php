@@ -22,6 +22,7 @@ class PesertaSeleksi extends Model
         'nilai_tes_buta_warna', // <-- TAMBAHKAN INI
         'status_tes_tpa', // <-- TAMBAHKAN
         'nilai_tes_tpa', // <-- TAMBAHKAN
+        'tpa_mulai_at', // <-- TAMBAHKAN INI
     ];
 
     // TAMBAHKAN/UPDATE $casts INI
@@ -29,6 +30,7 @@ class PesertaSeleksi extends Model
         'kehadiran' => 'boolean',
         'status_tes_buta_warna' => 'boolean', // <-- TAMBAHKAN INI
         'status_tes_tpa' => 'boolean', // <-- TAMBAHKAN
+        'tpa_mulai_at' => 'datetime', // <-- TAMBAHKAN INI
     ];
 
     // Relasi ke Jadwal

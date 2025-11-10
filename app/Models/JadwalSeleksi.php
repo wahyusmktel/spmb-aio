@@ -30,6 +30,7 @@ class JadwalSeleksi extends Model
         'file_berita_acara', // <-- TAMBAHKAN INI
         'status', // <-- TAMBAHKAN
         'published_by_user_id', // <-- TAMBAHKAN
+        'waktu_tpa_menit',
     ];
 
     /**
@@ -40,6 +41,7 @@ class JadwalSeleksi extends Model
         'tanggal_mulai_pelaksanaan' => 'datetime',
         'tanggal_akhir_pelaksanaan' => 'datetime',
         'tanggal_surat' => 'date',
+        'waktu_tpa_menit' => 'integer',
     ];
 
     /**

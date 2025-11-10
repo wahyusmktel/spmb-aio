@@ -415,6 +415,13 @@
                                             <x-input-error :messages="$errors->get('tanggal_surat')" class="mt-2" />
                                         </div>
                                         <div>
+                                            <x-input-label for="waktu_tpa_menit" value="Durasi Tes TPA (Menit)" />
+                                            <x-text-input id="waktu_tpa_menit" name="waktu_tpa_menit" type="number"
+                                                class="mt-1 block w-full" :value="old('waktu_tpa_menit')"
+                                                placeholder="Contoh: 90" />
+                                            <x-input-error :messages="$errors->get('waktu_tpa_menit')" class="mt-2" />
+                                        </div>
+                                        <div>
                                             <x-input-label for="id_penandatangan" value="Penandatangan" />
                                             <select id="id_penandatangan" name="id_penandatangan"
                                                 class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full">
@@ -494,6 +501,13 @@
                                             <x-text-input id="edit_tanggal_surat" name="tanggal_surat" type="date"
                                                 class="mt-1 block w-full" x-model="editData.tanggal_surat" required />
                                             <x-input-error :messages="$errors->get('tanggal_surat')" class="mt-2" />
+                                        </div>
+                                        <div>
+                                            <x-input-label for="edit_waktu_tpa_menit"
+                                                value="Durasi Tes TPA (Menit)" />
+                                            <x-text-input id="edit_waktu_tpa_menit" name="waktu_tpa_menit"
+                                                type="number" class="mt-1 block w-full"
+                                                x-model="editData.waktu_tpa_menit" />
                                         </div>
                                         <div>
                                             <x-input-label for="edit_id_penandatangan" value="Penandatangan" />

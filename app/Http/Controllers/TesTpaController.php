@@ -9,6 +9,7 @@ use App\Models\TpaSoal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class TesTpaController extends Controller
 {
@@ -55,27 +56,54 @@ class TesTpaController extends Controller
     public function kerjakan()
     {
         $peserta = $this->getPeserta();
+        $jadwal = $peserta->jadwalSeleksi;
 
         // 1. Cek double-submit
         if ($peserta->status_tes_tpa) {
             return redirect()->route('tes-tpa.index');
         }
 
-        // 2. Ambil grup soal yang di-assign ke jadwal si peserta
-        $jadwal = $peserta->jadwalSeleksi;
+        // 2. Cek apakah Admin sudah mengatur timer
+        if (!$jadwal->waktu_tpa_menit) {
+            return redirect()->route('tes-tpa.index')->with('error', 'Admin belum mengatur durasi pengerjaan untuk tes ini.');
+        }
+
+        // 3. LOGIKA TIMER
+        $waktuMulai = $peserta->tpa_mulai_at;
+        $durasiMenit = $jadwal->waktu_tpa_menit;
+
+        if (is_null($waktuMulai)) {
+            // === PERTAMA KALI MEMBUKA TES ===
+            // Set waktu mulai SEKARANG
+            $waktuMulai = now();
+            $peserta->update(['tpa_mulai_at' => $waktuMulai]);
+        }
+
+        // 4. Hitung waktu selesai
+        $waktuSelesai = $waktuMulai->copy()->addMinutes($durasiMenit);
+
+        // 5. Hitung sisa detik (false = boleh negatif)
+        $sisaDetik = Carbon::now()->diffInSeconds($waktuSelesai, false);
+
+        // Jika sisa detik negatif (waktu habis saat refresh), paksa 0
+        if ($sisaDetik < 0) {
+            $sisaDetik = 0;
+        }
+
+        // 6. Ambil grup soal (seperti sebelumnya)
         $grupSoals = $jadwal->tpaGrupSoals()
-            ->with(['tpaSoals' => function ($query) {
-                // Acak urutan soal di dalam grup
-                $query->inRandomOrder();
-            }])
+            ->with(['tpaSoals' => fn($q) => $q->inRandomOrder()])
             ->get();
 
         if ($grupSoals->isEmpty()) {
             return redirect()->route('peserta.dashboard')->with('error', 'Admin belum mengatur soal TPA untuk jadwal ini.');
         }
 
-        // Kirim $grupSoals (lengkap dengan soalnya) sebagai JSON ke view
-        return view('peserta.tes-tpa.kerjakan', compact('grupSoals'));
+        // 7. Kirim $sisaDetik ke view
+        return view('peserta.tes-tpa.kerjakan', [
+            'grupSoals' => $grupSoals,
+            'sisaDetik' => $sisaDetik
+        ]);
     }
 
     /**

@@ -74,6 +74,7 @@ class JadwalSeleksiController extends Controller
             'kota_surat' => 'required|string|max:100',
             'tanggal_surat' => 'required|date',
             'id_penandatangan' => 'required|exists:users,id',
+            'waktu_tpa_menit' => 'nullable|integer|min:1|max:300',
         ]);
 
         $request->request->add(['form_type' => 'create']);
@@ -104,6 +105,7 @@ class JadwalSeleksiController extends Controller
             'kota_surat' => 'required|string|max:100',
             'tanggal_surat' => 'required|date',
             'id_penandatangan' => 'required|exists:users,id',
+            'waktu_tpa_menit' => 'nullable|integer|min:1|max:300',
         ]);
 
         $request->request->add(['form_type' => 'edit']);
