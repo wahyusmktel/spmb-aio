@@ -16,28 +16,64 @@
         currentGrupIndex: 0,
         currentSoalIndex: 0,
         answers: {},
-
+    
+        sisaDetik: {{ $sisaDetik }},
+        timerDisplay: '',
+        timerInterval: null,
+    
+        initTimer() {
+            // Panggil updateTimer sekali agar tidak delay 1 detik
+            this.updateTimerDisplay();
+    
+            this.timerInterval = setInterval(() => {
+                this.sisaDetik--;
+                this.updateTimerDisplay();
+    
+                if (this.sisaDetik <= 0) {
+                    clearInterval(this.timerInterval);
+                    this.timerDisplay = 'WAKTU HABIS';
+    
+                    // Auto-submit
+                    this.$refs.cbtForm.submit();
+                }
+            }, 1000);
+        },
+    
+        updateTimerDisplay() {
+            if (this.sisaDetik < 0) return;
+    
+            const jam = Math.floor(this.sisaDetik / 3600);
+            const menit = Math.floor((this.sisaDetik % 3600) / 60);
+            const detik = this.sisaDetik % 60;
+    
+            // Format HH:MM:SS
+            this.timerDisplay =
+                jam.toString().padStart(2, '0') + ':' +
+                menit.toString().padStart(2, '0') + ':' +
+                detik.toString().padStart(2, '0');
+        },
+    
         // Computed: Grup yang sedang aktif
         get currentGrup() {
             return this.allGrupSoals[this.currentGrupIndex];
         },
-
+    
         // Computed: Soal yang sedang aktif
         get currentSoal() {
             return this.currentGrup.tpa_soals[this.currentSoalIndex];
         },
-
+    
         // Pindah soal
         changeSoal(index) {
             this.currentSoalIndex = index;
         },
-
+    
         // Pindah grup (dan reset soal ke 0)
         changeGrup(index) {
             this.currentGrupIndex = index;
             this.currentSoalIndex = 0;
         },
-
+    
         // Navigasi soal
         nextSoal() {
             if (this.currentSoalIndex < this.currentGrup.tpa_soals.length - 1) {
@@ -49,7 +85,7 @@
                 this.currentSoalIndex--;
             }
         },
-
+    
         // Cek progres
         isSoalAnswered(soalId) {
             return this.answers.hasOwnProperty(soalId);
@@ -62,11 +98,18 @@
             this.allGrupSoals.forEach(grup => total += grup.tpa_soals.length);
             return total;
         }
-    }" x-cloak>
+    }" x-init="initTimer()" x-cloak>
 
-        <form action="{{ route('tes-tpa.submit') }}" method="POST"
+        <form x-ref="cbtForm" action="{{ route('tes-tpa.submit') }}" method="POST"
             onsubmit="return confirm('Anda yakin ingin mengumpulkan SEMUA jawaban? Tes tidak dapat diulang.');">
             @csrf
+
+            <div class="sticky top-16 z-10 bg-indigo-800 text-white shadow-lg">
+                <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-2 px-4 flex justify-center items-center">
+                    <span class="font-medium mr-2">Sisa Waktu:</span>
+                    <span class="text-2xl font-bold font-mono" x-text="timerDisplay">00:00:00</span>
+                </div>
+            </div>
 
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-12">
 
