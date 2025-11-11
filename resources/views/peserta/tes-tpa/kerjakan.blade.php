@@ -44,13 +44,14 @@
     
             const jam = Math.floor(this.sisaDetik / 3600);
             const menit = Math.floor((this.sisaDetik % 3600) / 60);
-            const detik = this.sisaDetik % 60;
+            // === FIX: Tambahkan Math.floor() ===
+            const detik = Math.floor(this.sisaDetik % 60);
     
             // Format HH:MM:SS
             this.timerDisplay =
                 jam.toString().padStart(2, '0') + ':' +
                 menit.toString().padStart(2, '0') + ':' +
-                detik.toString().padStart(2, '0');
+                detik.toString().padStart(2, '0'); // <-- SEKARANG SUDAH BENAR
         },
     
         // Computed: Grup yang sedang aktif
