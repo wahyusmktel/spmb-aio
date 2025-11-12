@@ -98,11 +98,44 @@
             let total = 0;
             this.allGrupSoals.forEach(grup => total += grup.tpa_soals.length);
             return total;
+        },
+        nextGrup() {
+            if (this.currentGrupIndex < this.allGrupSoals.length - 1) {
+                this.currentGrupIndex++;
+                this.currentSoalIndex = 0;
+            }
+        },
+        submitTest(event) {
+            if (this.totalAnswered < this.totalSoal) {
+                event.preventDefault();
+                alert('PERINGATAN: Masih ada soal yang belum Anda jawab.\n\nSilakan periksa kembali semua grup soal.');
+                return; // Hentikan fungsi
+            }
+            if (!confirm('Anda yakin ingin mengumpulkan SEMUA jawaban? Tes tidak dapat diulang.')) {
+                event.preventDefault();
+            }
+        },
+        get isCurrentGrupComplete() {
+            // Loop semua soal di grup yang aktif
+            for (const soal of this.currentGrup.tpa_soals) {
+                // Jika satu saja soal BELUM ada di 'answers'
+                if (!this.answers.hasOwnProperty(soal.id)) {
+                    return false; // Grup belum selesai
+                }
+            }
+            return true; // Semua soal di grup ini sudah dijawab
+        },
+        validateAndNextGrup() {
+            if (this.isCurrentGrupComplete) {
+                this.nextGrup(); // Panggil fungsi pindah grup (jika lolos)
+            } else {
+                // Tampilkan peringatan jika belum selesai
+                alert('PERINGATAN: Anda harus menjawab semua soal di grup ini sebelum melanjutkan ke grup berikutnya.');
+            }
         }
     }" x-init="initTimer()" x-cloak>
 
-        <form x-ref="cbtForm" action="{{ route('tes-tpa.submit') }}" method="POST"
-            onsubmit="return confirm('Anda yakin ingin mengumpulkan SEMUA jawaban? Tes tidak dapat diulang.');">
+        <form x-ref="cbtForm" action="{{ route('tes-tpa.submit') }}" method="POST" x-on:submit="submitTest($event)">
             @csrf
 
             <div class="sticky top-16 z-10 bg-indigo-800 text-white shadow-lg">
@@ -121,16 +154,20 @@
                             <h4 class="font-semibold text-gray-900 dark:text-gray-100">Grup Soal</h4>
                             <div class="mt-4 space-y-2">
                                 <template x-for="(grup, index) in allGrupSoals" :key="grup.id">
-                                    <button type="button" @click="changeGrup(index)"
-                                        :class="{
-                                            'bg-indigo-600 text-white': index == currentGrupIndex,
-                                            'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300': index !=
-                                                currentGrupIndex
-                                        }"
+                                    <div :class="{
+                                        'bg-indigo-600 text-white': index == currentGrupIndex, // Sedang dikerjakan
+                                        'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300': index <
+                                            currentGrupIndex, // Selesai
+                                        'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 opacity-60': index >
+                                            currentGrupIndex // Terkunci
+                                    }"
                                         class="w-full text-left px-3 py-2 rounded-md font-medium text-sm">
                                         <span x-text="grup.nama_grup"></span>
                                         (<span x-text="grup.tpa_soals.length"></span> Soal)
-                                    </button>
+
+                                        <span x-show="index < currentGrupIndex">(Selesai)</span>
+                                        <span x-show="index == currentGrupIndex">(Mengerjakan)</span>
+                                    </div>
                                 </template>
                             </div>
                         </div>
@@ -195,19 +232,30 @@
                                 </div>
                             </div>
 
-                            <div
-                                class="p-6 bg-gray-50 dark:bg-gray-700 border-t border-gray-200 dark:border-gray-600 flex justify-between items-center">
+                            <div class="p-6 bg-gray-50 dark:bg-gray-700 border-t ... flex justify-between items-center">
 
                                 <button type="button" @click="prevSoal()" :disabled="currentSoalIndex == 0"
-                                    class="inline-flex items-center px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-500 rounded-md font-semibold text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-25 transition ease-in-out duration-150">
+                                    class="inline-flex items-center ... disabled:opacity-25 ...">
                                     &larr; Sebelumnya
                                 </button>
 
                                 <button type="button" @click="nextSoal()"
-                                    :disabled="currentSoalIndex == currentGrup.tpa_soals.length - 1"
-                                    class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-25 transition ease-in-out duration-150">
+                                    x-show="currentSoalIndex < currentGrup.tpa_soals.length - 1"
+                                    class="inline-flex items-center ...">
                                     Selanjutnya &rarr;
                                 </button>
+
+                                <button type="button" @click="validateAndNextGrup()"
+                                    x-show="currentSoalIndex == currentGrup.tpa_soals.length - 1 && currentGrupIndex < allGrupSoals.length - 1"
+                                    class="inline-flex items-center px-4 py-2 bg-blue-600 border ... text-white ...">
+                                    Lanjut ke Grup Berikutnya &rarr;
+                                </button>
+
+                                <span
+                                    x-show="currentSoalIndex == currentGrup.tpa_soals.length - 1 && currentGrupIndex == allGrupSoals.length - 1"
+                                    class="text-sm font-medium text-green-600 dark:text-green-400">
+                                    Grup Terakhir Selesai.
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -238,10 +286,17 @@
                                 Total Jawaban: <span x-text="totalAnswered"></span> / <span x-text="totalSoal"></span>
                             </div>
 
-                            <x-primary-button type="submit"
-                                class="w-full mt-4 bg-green-600 hover:bg-green-700 text-center justify-center">
-                                SELESAI & KUMPULKAN
-                            </x-primary-button>
+                            <div x-show="currentGrupIndex == allGrupSoals.length - 1">
+                                <x-primary-button type="submit"
+                                    class="w-full mt-4 bg-green-600 hover:bg-green-700 text-center justify-center">
+                                    SELESAI & KUMPULKAN
+                                </x-primary-button>
+                            </div>
+
+                            <div x-show="currentGrupIndex != allGrupSoals.length - 1"
+                                class="w-full mt-4 p-2 text-center text-sm bg-gray-100 dark:bg-gray-700 text-gray-500 rounded-md">
+                                Selesaikan grup ini untuk lanjut...
+                            </div>
                         </div>
                     </div>
 
