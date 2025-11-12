@@ -1,14 +1,14 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Data Referensi Guru') }}
         </h2>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900">
 
                     <div x-data="{
                         editData: {},
@@ -25,7 +25,7 @@
 
                                 <x-secondary-button x-data=""
                                     x-on:click.prevent="$dispatch('open-modal', 'import-modal')"
-                                    class="bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white dark:text-gray-100">
+                                    class="bg-green-500 hover:bg-green-600 text-white ml-2">
                                     Import Excel
                                 </x-secondary-button>
                             </div>
@@ -64,6 +64,16 @@
                                 {{ session('success') }}
                             </div>
                         @endif
+                        @if (session('warning'))
+                            <div class="mb-4 p-4 bg-yellow-100 text-yellow-700 rounded-lg">
+                                {{ session('warning') }}
+                            </div>
+                        @endif
+                        @if (session('error'))
+                            <div class="mb-4 p-4 bg-red-100 text-red-700 rounded-lg">
+                                {{ session('error') }}
+                            </div>
+                        @endif
 
                         @if ($errors->any() && !session('import_errors'))
                             <div class="mb-4 p-4 bg-red-100 text-red-700 rounded-lg">
@@ -79,27 +89,27 @@
 
 
                         <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                                <thead class="bg-gray-50 dark:bg-gray-700">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
                                     <tr>
                                         <th
-                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             NIP</th>
                                         <th
-                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             Nama</th>
                                         <th
-                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             Email (Akun)</th>
                                         <th
-                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             Mata Pelajaran</th>
                                         <th
-                                            class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                            class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             Aksi</th>
                                     </tr>
                                 </thead>
-                                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                                <tbody class="bg-white divide-y divide-gray-200">
                                     @forelse ($gurus as $guru)
                                         <tr>
                                             <td class="px-6 py-4 whitespace-nowrap">{{ $guru->nip }}</td>
@@ -107,11 +117,10 @@
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 @if ($guru->user)
                                                     <span
-                                                        class="font-bold text-green-600 dark:text-green-400">{{ $guru->user->email }}</span>
+                                                        class="font-bold text-green-600">{{ $guru->user->email }}</span>
                                                     (Terhubung)
                                                 @elseif ($guru->email)
-                                                    <span
-                                                        class="text-yellow-600 dark:text-yellow-400">{{ $guru->email }}</span>
+                                                    <span class="text-yellow-600">{{ $guru->email }}</span>
                                                     (Belum Dibuat Akun)
                                                 @else
                                                     <span class="text-red-500 italic">(Email Kosong)</span>
@@ -139,7 +148,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="4" class="px-6 py-4 whitespace-nowrap text-center">
+                                            <td colspan="5" class="px-6 py-4 whitespace-nowrap text-center">
                                                 @if ($search)
                                                     Data guru tidak ditemukan untuk pencarian "{{ $search }}".
                                                 @else
@@ -156,20 +165,19 @@
                             {{ $gurus->links() }}
                         </div>
 
-
                         <x-modal name="import-modal" :show="$errors->has('file_import')" focusable>
                             <form method="POST" action="{{ route('guru.import') }}" class="p-6"
                                 enctype="multipart/form-data">
                                 @csrf
-                                <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Import Data Guru</h2>
-                                <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                                <h2 class="text-lg font-medium text-gray-900">Import Data Guru</h2>
+                                <p class="mt-1 text-sm text-gray-600">
                                     Upload file Excel (xlsx, xls, csv) dengan header: <strong>nip, nama_guru,
                                         mata_pelajaran</strong>.
                                 </p>
                                 <div class="mt-6">
                                     <x-input-label for="file_import" value="File Excel" />
                                     <input id="file_import" name="file_import" type="file"
-                                        class="mt-1 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                                        class="mt-1 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
                                         required />
                                     <x-input-error :messages="$errors->get('file_import')" class="mt-2" />
                                 </div>
@@ -180,11 +188,12 @@
                                 </div>
                             </form>
                         </x-modal>
+
                         <x-modal name="create-modal" :show="$errors->any() && old('form_type') === 'create'" focusable>
                             <form method="POST" action="{{ route('guru.store') }}" class="p-6">
                                 @csrf
                                 <input type="hidden" name="form_type" value="create">
-                                <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Tambah Guru Baru</h2>
+                                <h2 class="text-lg font-medium text-gray-900">Tambah Guru Baru</h2>
                                 <div class="mt-6">
                                     <x-input-label for="nip" value="NIP" />
                                     <x-text-input id="nip" name="nip" type="text" class="mt-1 block w-full"
@@ -204,7 +213,7 @@
                                     <x-input-error :messages="$errors->get('email')" class="mt-2" />
                                 </div>
                                 <div class="mt-4">
-                                    <x-input-label for="mata_pelajaran" value="Mata Pelajaran" />
+                                    <x-input-label for="mata_pelajaran" value="Mata Pelajaran (Jabatan)" />
                                     <x-text-input id="mata_pelajaran" name="mata_pelajaran" type="text"
                                         class="mt-1 block w-full" :value="old('mata_pelajaran')" required />
                                     <x-input-error :messages="$errors->get('mata_pelajaran')" class="mt-2" />
@@ -221,7 +230,7 @@
                                 @csrf
                                 @method('PATCH')
                                 <input type="hidden" name="form_type" value="edit">
-                                <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Edit Data Guru</h2>
+                                <h2 class="text-lg font-medium text-gray-900">Edit Data Guru</h2>
                                 <div class="mt-6">
                                     <x-input-label for="edit_nip" value="NIP" />
                                     <x-text-input id="edit_nip" name="nip" type="text"
@@ -241,7 +250,7 @@
                                     <x-input-error :messages="$errors->get('email')" class="mt-2" />
                                 </div>
                                 <div class="mt-4">
-                                    <x-input-label for="edit_mata_pelajaran" value="Mata Pelajaran" />
+                                    <x-input-label for="edit_mata_pelajaran" value="Mata Pelajaran (Jabatan)" />
                                     <x-text-input id="edit_mata_pelajaran" name="mata_pelajaran" type="text"
                                         class="mt-1 block w-full" x-model="editData.mata_pelajaran" required />
                                     <x-input-error :messages="$errors->get('mata_pelajaran')" class="mt-2" />
@@ -257,10 +266,10 @@
                             <form method="POST" :action="`/guru/${deleteId}`" class="p-6">
                                 @csrf
                                 @method('DELETE')
-                                <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                                <h2 class="text-lg font-medium text-gray-900">
                                     Apakah Anda yakin ingin menghapus data ini?
                                 </h2>
-                                <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                                <p class="mt-1 text-sm text-gray-600">
                                     Data yang sudah dihapus tidak dapat dikembalikan.
                                 </p>
                                 <div class="mt-6 flex justify-end">
