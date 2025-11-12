@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        <h2 class="font-semibold text-xl leading-tight">
             {{ __('Data Jadwal Seleksi') }}
 
             @if ($tahunAktif)
@@ -71,12 +71,12 @@
                                             <th
                                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                 Waktu Pelaksanaan</th>
-                                            <th
+                                            {{-- <th
                                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                Lokasi</th>
-                                            <th
+                                                Lokasi</th> --}}
+                                            {{-- <th
                                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                Penandatangan</th>
+                                                Penandatangan</th> --}}
                                             <th
                                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                 Status</th>
@@ -97,10 +97,10 @@
                                                     Selesai:
                                                     {{ \Carbon\Carbon::parse($jadwal->tanggal_akhir_pelaksanaan)->format('d-m-Y H:i') }}
                                                 </td>
-                                                <td class="px-6 py-4 whitespace-nowrap">{{ $jadwal->lokasi_kegiatan }}
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap">
-                                                    {{ $jadwal->penandatangan->name ?? 'N/A' }}</td>
+                                                {{-- <td class="px-6 py-4 whitespace-nowrap">{{ $jadwal->lokasi_kegiatan }}
+                                                </td> --}}
+                                                {{-- <td class="px-6 py-4 whitespace-nowrap">
+                                                    {{ $jadwal->penandatangan->name ?? 'N/A' }}</td> --}}
                                                 <td class="px-6 py-4 whitespace-nowrap">
                                                     @if ($jadwal->status == 'menunggu_nst')
                                                         <span
@@ -335,7 +335,8 @@
                                                             </x-dropdown>
                                                         </div>
                                                     @else
-                                                        <span class="text-xs text-gray-500 italic">Menunggu NST</span>
+                                                        <span class="text-xs text-gray-500 italic">Tombol aksi akan
+                                                            muncul apabila semua sudah disetujui</span>
                                                     @endif
                                                 </td>
                                             </tr>

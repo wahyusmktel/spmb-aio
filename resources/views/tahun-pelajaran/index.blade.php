@@ -1,14 +1,14 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Data Tahun Pelajaran') }}
         </h2>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900">
 
                     <div x-data="{
                         editData: {},
@@ -47,21 +47,21 @@
                         @endif
 
                         <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                                <thead class="bg-gray-50 dark:bg-gray-700">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
                                     <tr>
                                         <th
-                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             Nama Tahun Pelajaran</th>
                                         <th
-                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             Status</th>
                                         <th
-                                            class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                            class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             Aksi</th>
                                     </tr>
                                 </thead>
-                                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                                <tbody class="bg-white divide-y divide-gray-200">
                                     @forelse ($tahunPelajarans as $tahunPelajaran)
                                         <tr>
                                             <td class="px-6 py-4 whitespace-nowrap">
@@ -125,7 +125,7 @@
                                 @csrf
                                 <input type="hidden" name="form_type" value="create">
 
-                                <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Tambah Tahun Pelajaran
+                                <h2 class="text-lg font-medium text-gray-900">Tambah Tahun Pelajaran
                                     Baru</h2>
                                 <div class="mt-6">
                                     <x-input-label for="nama_tahun_pelajaran" value="Nama Tahun Pelajaran" />
@@ -137,7 +137,7 @@
                                 <div class="mt-4">
                                     <x-input-label for="status" value="Status" />
                                     <select id="status" name="status"
-                                        class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm mt-1 block w-full">
+                                        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full">
                                         <option value="1" {{ old('status') == '1' ? 'selected' : '' }}>Aktif
                                         </option>
                                         <option value="0" {{ old('status') == '0' ? 'selected' : '' }}>Tidak Aktif
@@ -158,7 +158,7 @@
                                 @method('PATCH')
                                 <input type="hidden" name="form_type" value="edit">
 
-                                <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Edit Data Tahun
+                                <h2 class="text-lg font-medium text-gray-900">Edit Data Tahun
                                     Pelajaran</h2>
                                 <div class="mt-6">
                                     <x-input-label for="edit_nama_tahun_pelajaran" value="Nama Tahun Pelajaran" />
@@ -170,8 +170,8 @@
                                 <div class="mt-4">
                                     <x-input-label for="edit_status" value="Status" />
                                     <select id="edit_status" name="status" x-model="editData.status"
-                                        class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm mt-1 block w-full">
-                                        <option value="1">Aktif</an>
+                                        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full">
+                                        <option value="1">Aktif</option>
                                         <option value="0">Tidak Aktif</option>
                                     </select>
                                     <x-input-error :messages="$errors->get('status')" class="mt-2" />
@@ -187,10 +187,10 @@
                             <form method="POST" :action="`/tahun-pelajaran/${deleteId}`" class="p-6">
                                 @csrf
                                 @method('DELETE')
-                                <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                                <h2 class="text-lg font-medium text-gray-900">
                                     Apakah Anda yakin ingin menghapus data ini?
                                 </h2>
-                                <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                                <p class="mt-1 text-sm text-gray-600">
                                     Data yang sudah dihapus tidak dapat dikembalikan.
                                 </p>
                                 <div class="mt-6 flex justify-end">

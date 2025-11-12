@@ -25,6 +25,7 @@ use App\Http\Controllers\TpaGrupSoalController;
 use App\Http\Controllers\TpaSoalController;
 use App\Http\Controllers\JadwalTpaSettingController;
 use App\Http\Controllers\TesTpaController;
+use App\Http\Controllers\SettingController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -233,6 +234,10 @@ Route::middleware('auth')->group(function () {
         Route::post('/jadwal-seleksi/{jadwal}/setting-tpa', [JadwalTpaSettingController::class, 'sync'])
             ->name('jadwal-tpa-setting.sync');
         // ----------------------------------------
+
+        // --- RUTE BARU SETTING ---
+        Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
+        Route::post('/settings/update-logo', [SettingController::class, 'updateLogo'])->name('settings.update-logo');
     });
 });
 
