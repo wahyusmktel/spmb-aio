@@ -1,55 +1,87 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Manajemen Grup Soal TPA (Bank Soal)') }}
         </h2>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900">
 
                     <div x-data="{ editData: {}, deleteId: null, editFormAction: '' }">
-                        <x-primary-button x-data="" x-on:click.prevent="$dispatch('open-modal', 'create-modal')" class="mb-4">
+                        <x-primary-button x-data=""
+                            x-on:click.prevent="$dispatch('open-modal', 'create-modal')" class="mb-4">
                             Tambah Grup Soal Baru
                         </x-primary-button>
 
-                        @if (session('success')) <div class="mb-4 p-4 bg-green-100 ...">{{ session('success') }}</div> @endif
-                        @if ($errors->any()) <div class="mb-4 p-4 bg-red-100 ...">... (Loop errors) ...</div> @endif
-
+                        @if (session('success'))
+                            <div class="mb-4 p-4 bg-green-100 text-green-700 rounded-lg">{{ session('success') }}</div>
+                        @endif
+                        @if ($errors->any())
+                            <div class="mb-4 p-4 bg-red-100 text-red-700 rounded-lg">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                         <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y ...">
-                                <thead class="bg-gray-50 dark:bg-gray-700">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
                                     <tr>
-                                        <th class="px-6 py-3 ...">Nama Grup</th>
-                                        <th class="px-6 py-3 ...">Deskripsi</th>
-                                        <th class="px-6 py-3 ...">Jumlah Soal</th>
-                                        <th class="px-6 py-3 ...">Status</th>
-                                        <th class="px-6 py-3 ...">Aksi</th>
+                                        <th
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Nama Grup</th>
+                                        <th
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Deskripsi</th>
+                                        <th
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Jumlah Soal</th>
+                                        <th
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Status</th>
+                                        <th
+                                            class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Aksi</th>
                                     </tr>
                                 </thead>
-                                <tbody class="bg-white ...">
+                                <tbody class="bg-white divide-y divide-gray-200">
                                     @forelse ($grups as $grup)
                                         <tr>
-                                            <td class="px-6 py-4 ...">{{ $grup->nama_grup }}</td>
-                                            <td class="px-6 py-4 ...">{{ Str::limit($grup->deskripsi, 50) }}</td>
-                                            <td class="px-6 py-4 ...">{{ $grup->tpa_soals_count }} Soal</td>
-                                            <td class="px-6 py-4 ...">
-                                                @if ($grup->status_aktif) <span class="... bg-green-100 text-green-800">Aktif</span>
-                                                @else <span class="... bg-red-100 text-red-800">Non-Aktif</span> @endif
+                                            <td class="px-6 py-4 whitespace-nowrap">{{ $grup->nama_grup }}</td>
+                                            <td class="px-6 py-4">{{ Str::limit($grup->deskripsi, 50) }}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">{{ $grup->tpa_soals_count }} Soal
                                             </td>
-                                            <td class="px-6 py-4 ... text-right text-sm">
-                                                <x-secondary-button x-data="" x-on:click.prevent="$dispatch('open-modal', 'edit-modal'); editData = {{ $grup }}; editFormAction = '{{ route('tpa-grup-soal.update', $grup->id) }}';">
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                @if ($grup->status_aktif)
+                                                    <span
+                                                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Aktif</span>
+                                                @else
+                                                    <span
+                                                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Non-Aktif</span>
+                                                @endif
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
+                                                <x-secondary-button x-data=""
+                                                    x-on:click.prevent="$dispatch('open-modal', 'edit-modal'); editData = {{ $grup }}; editFormAction = '{{ route('tpa-grup-soal.update', $grup->id) }}';">
                                                     Edit
                                                 </x-secondary-button>
-                                                <x-danger-button x-data="" x-on:click.prevent="$dispatch('open-modal', 'delete-modal'); deleteId = {{ $grup->id }};" class="ml-2">
+                                                <x-danger-button x-data=""
+                                                    x-on:click.prevent="$dispatch('open-modal', 'delete-modal'); deleteId = {{ $grup->id }};"
+                                                    class="ml-2">
                                                     Hapus
                                                 </x-danger-button>
                                             </td>
                                         </tr>
                                     @empty
-                                        <tr><td colspan="5" class="px-6 py-4 text-center">Data Grup Soal masih kosong.</td></tr>
+                                        <tr>
+                                            <td colspan="5" class="px-6 py-4 text-center">Data Grup Soal masih
+                                                kosong.</td>
+                                        </tr>
                                     @endforelse
                                 </tbody>
                             </table>
@@ -60,21 +92,26 @@
                             <form method="POST" action="{{ route('tpa-grup-soal.store') }}" class="p-6">
                                 @csrf
                                 <input type="hidden" name="form_type" value="create">
-                                <h2 class="text-lg ...">Tambah Grup Soal</h2>
+                                <h2 class="text-lg font-medium text-gray-900">Tambah Grup Soal</h2>
                                 <div class="mt-6">
                                     <x-input-label for="nama_grup" value="Nama Grup" />
-                                    <x-text-input id="nama_grup" name="nama_grup" type="text" class="mt-1 block w-full" :value="old('nama_grup')" required />
+                                    <x-text-input id="nama_grup" name="nama_grup" type="text"
+                                        class="mt-1 block w-full" :value="old('nama_grup')" required />
                                     <x-input-error :messages="$errors->get('nama_grup')" class="mt-2" />
                                 </div>
                                 <div class="mt-4">
                                     <x-input-label for="deskripsi" value="Deskripsi (Opsional)" />
-                                    <textarea id="deskripsi" name="deskripsi" rows="3" class="border-gray-300 ... mt-1 block w-full">{{ old('deskripsi') }}</textarea>
+                                    <textarea id="deskripsi" name="deskripsi" rows="3"
+                                        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full">{{ old('deskripsi') }}</textarea>
                                 </div>
                                 <div class="mt-4">
                                     <x-input-label for="status_aktif" value="Status" />
-                                    <select id="status_aktif" name="status_aktif" class="border-gray-300 ... mt-1 block w-full">
-                                        <option value="1" {{ old('status_aktif', '1') == '1' ? 'selected' : '' }}>Aktif</option>
-                                        <option value="0" {{ old('status_aktif') == '0' ? 'selected' : '' }}>Non-Aktif</option>
+                                    <select id="status_aktif" name="status_aktif"
+                                        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full">
+                                        <option value="1" {{ old('status_aktif', '1') == '1' ? 'selected' : '' }}>
+                                            Aktif</option>
+                                        <option value="0" {{ old('status_aktif') == '0' ? 'selected' : '' }}>
+                                            Non-Aktif</option>
                                     </select>
                                 </div>
                                 <div class="mt-6 flex justify-end">
@@ -89,18 +126,21 @@
                                 @csrf
                                 @method('PATCH')
                                 <input type="hidden" name="form_type" value="edit">
-                                <h2 class="text-lg ...">Edit Grup Soal</h2>
+                                <h2 class="text-lg font-medium text-gray-900">Edit Grup Soal</h2>
                                 <div class="mt-6">
                                     <x-input-label for="edit_nama_grup" value="Nama Grup" />
-                                    <x-text-input id="edit_nama_grup" name="nama_grup" type="text" x-model="editData.nama_grup" class="mt-1 block w-full" required />
+                                    <x-text-input id="edit_nama_grup" name="nama_grup" type="text"
+                                        x-model="editData.nama_grup" class="mt-1 block w-full" required />
                                 </div>
                                 <div class="mt-4">
                                     <x-input-label for="edit_deskripsi" value="Deskripsi (Opsional)" />
-                                    <textarea id="edit_deskripsi" name="deskripsi" rows="3" x-model="editData.deskripsi" class="border-gray-300 ... mt-1 block w-full"></textarea>
+                                    <textarea id="edit_deskripsi" name="deskripsi" rows="3" x-model="editData.deskripsi"
+                                        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"></textarea>
                                 </div>
                                 <div class="mt-4">
                                     <x-input-label for="edit_status_aktif" value="Status" />
-                                    <select id="edit_status_aktif" name="status_aktif" x-model="editData.status_aktif" class="border-gray-300 ... mt-1 block w-full">
+                                    <select id="edit_status_aktif" name="status_aktif" x-model="editData.status_aktif"
+                                        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full">
                                         <option value="1">Aktif</option>
                                         <option value="0">Non-Aktif</option>
                                     </select>
@@ -116,8 +156,9 @@
                             <form method="POST" :action="`/tpa-grup-soal/${deleteId}`" class="p-6">
                                 @csrf
                                 @method('DELETE')
-                                <h2 class="text-lg ...">Hapus Grup Soal?</h2>
-                                <p class="mt-1 ...">Semua soal di dalam grup ini akan ikut terhapus permanen.</p>
+                                <h2 class="text-lg font-medium text-gray-900">Hapus Grup Soal?</h2>
+                                <p class="mt-1 text-sm text-gray-600">Semua soal di dalam grup ini akan ikut terhapus
+                                    permanen.</p>
                                 <div class="mt-6 flex justify-end">
                                     <x-secondary-button x-on:click="$dispatch('close')">Batal</x-secondary-button>
                                     <x-danger-button class="ml-3">Hapus</x-danger-button>

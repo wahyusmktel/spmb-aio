@@ -1,13 +1,13 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Edit Soal Buta Warna ID: ') }} {{ $soal->id }}
         </h2>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <form action="{{ route('soal-buta-warna.update', $soal->id) }}" method="POST"
                     enctype="multipart/form-data" class="p-6 space-y-6">
                     @csrf
@@ -18,11 +18,11 @@
                         <img src="{{ Storage::url($soal->gambar_soal) }}" alt="Soal {{ $soal->id }}"
                             class="w-40 h-40 object-cover rounded my-2">
                         <input id="gambar_soal" name="gambar_soal" type="file" accept=".jpg,.jpeg,.png"
-                            class="mt-1 block w-full text-sm ... " />
+                            class="mt-1 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none" />
                         <x-input-error :messages="$errors->get('gambar_soal')" class="mt-2" />
                     </div>
 
-                    <hr class="dark:border-gray-700">
+                    <hr class="border-gray-200">
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
@@ -55,11 +55,12 @@
                         </div>
                     </div>
 
-                    <hr class="dark:border-gray-700">
+                    <hr class="border-gray-200">
 
                     <div>
                         <x-input-label for="jawaban_benar" value="Kunci Jawaban Benar" />
-                        <select id="jawaban_benar" name="jawaban_benar" class="border-gray-300 ... mt-1 block w-full"
+                        <select id="jawaban_benar" name="jawaban_benar"
+                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
                             required>
                             <option value="A"
                                 {{ old('jawaban_benar', $soal->jawaban_benar) == 'A' ? 'selected' : '' }}>A</option>

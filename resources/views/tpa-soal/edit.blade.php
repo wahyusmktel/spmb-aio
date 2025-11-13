@@ -1,13 +1,13 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Edit Soal TPA ID: ') }} {{ $soal->id }}
         </h2>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <form action="{{ route('tpa-soal.update', $soal->id) }}" method="POST" enctype="multipart/form-data"
                     class="p-6 space-y-6">
                     @csrf
@@ -16,7 +16,8 @@
                     <div>
                         <x-input-label for="tpa_grup_soal_id" value="Grup Soal (Kategori)" />
                         <select id="tpa_grup_soal_id" name="tpa_grup_soal_id"
-                            class="border-gray-300 ... mt-1 block w-full" required>
+                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
+                            required>
                             <option value="">-- Pilih Grup Soal --</option>
                             @foreach ($grups as $grup)
                                 <option value="{{ $grup->id }}"
@@ -30,7 +31,8 @@
 
                     <div>
                         <x-input-label for="pertanyaan_teks" value="Pertanyaan (Teks)" />
-                        <textarea id="pertanyaan_teks" name="pertanyaan_teks" rows="4" class="border-gray-300 ... mt-1 block w-full"
+                        <textarea id="pertanyaan_teks" name="pertanyaan_teks" rows="4"
+                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
                             required>{{ old('pertanyaan_teks', $soal->pertanyaan_teks) }}</textarea>
                         <x-input-error :messages="$errors->get('pertanyaan_teks')" class="mt-2" />
                     </div>
@@ -40,43 +42,54 @@
                         @if ($soal->gambar_soal)
                             <img src="{{ Storage::url($soal->gambar_soal) }}" alt="Soal {{ $soal->id }}"
                                 class="w-40 h-auto object-cover rounded my-2">
-                            <p class="text-sm text-gray-600 dark:text-gray-400">Kosongkan jika tidak ingin mengubah
+                            <p class="text-sm text-gray-600">Kosongkan jika tidak ingin mengubah
                                 gambar.</p>
                         @endif
                         <input id="gambar_soal" name="gambar_soal" type="file" accept=".jpg,.jpeg,.png"
-                            class="mt-1 block w-full text-sm ... " />
+                            class="mt-1 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none" />
                         <x-input-error :messages="$errors->get('gambar_soal')" class="mt-2" />
                     </div>
 
-                    <hr class="dark:border-gray-700">
+                    <hr class="border-gray-200">
 
                     <div>
                         <x-input-label for="pilihan_a" value="Pilihan A (Wajib)" />
-                        <textarea id="pilihan_a" name="pilihan_a" rows="2" class="border-gray-300 ... mt-1 block w-full" required>{{ old('pilihan_a', $soal->pilihan_a) }}</textarea>
+                        <textarea id="pilihan_a" name="pilihan_a" rows="2"
+                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
+                            required>{{ old('pilihan_a', $soal->pilihan_a) }}</textarea>
                         <x-input-error :messages="$errors->get('pilihan_a')" class="mt-2" />
                     </div>
                     <div>
                         <x-input-label for="pilihan_b" value="Pilihan B (Wajib)" />
-                        <textarea id="pilihan_b" name="pilihan_b" rows="2" class="border-gray-300 ... mt-1 block w-full" required>{{ old('pilihan_b', $soal->pilihan_b) }}</textarea>
+                        <textarea id="pilihan_b" name="pilihan_b" rows="2"
+                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
+                            required>{{ old('pilihan_b', $soal->pilihan_b) }}</textarea>
                     </div>
                     <div>
                         <x-input-label for="pilihan_c" value="Pilihan C (Wajib)" />
-                        <textarea id="pilihan_c" name="pilihan_c" rows="2" class="border-gray-300 ... mt-1 block w-full" required>{{ old('pilihan_c', $soal->pilihan_c) }}</textarea>
+                        <textarea id="pilihan_c" name="pilihan_c" rows="2"
+                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
+                            required>{{ old('pilihan_c', $soal->pilihan_c) }}</textarea>
                     </div>
                     <div>
                         <x-input-label for="pilihan_d" value="Pilihan D (Wajib)" />
-                        <textarea id="pilihan_d" name="pilihan_d" rows="2" class="border-gray-300 ... mt-1 block w-full" required>{{ old('pilihan_d', $soal->pilihan_d) }}</textarea>
+                        <textarea id="pilihan_d" name="pilihan_d" rows="2"
+                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
+                            required>{{ old('pilihan_d', $soal->pilihan_d) }}</textarea>
                     </div>
                     <div>
                         <x-input-label for="pilihan_e" value="Pilihan E (Wajib)" />
-                        <textarea id="pilihan_e" name="pilihan_e" rows="2" class="border-gray-300 ... mt-1 block w-full" required>{{ old('pilihan_e', $soal->pilihan_e) }}</textarea>
+                        <textarea id="pilihan_e" name="pilihan_e" rows="2"
+                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
+                            required>{{ old('pilihan_e', $soal->pilihan_e) }}</textarea>
                     </div>
 
-                    <hr class="dark:border-gray-700">
+                    <hr class="border-gray-200">
 
                     <div>
                         <x-input-label for="jawaban_benar" value="Kunci Jawaban Benar" />
-                        <select id="jawaban_benar" name="jawaban_benar" class="border-gray-300 ... mt-1 block w-full"
+                        <select id="jawaban_benar" name="jawaban_benar"
+                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
                             required>
                             <option value="A"
                                 {{ old('jawaban_benar', $soal->jawaban_benar) == 'A' ? 'selected' : '' }}>A</option>

@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Tetapkan Petugas untuk:') }} <span class="font-bold">{{ $jadwal->judul_kegiatan }}</span>
         </h2>
         <a href="{{ route('jadwal-seleksi.index') }}" class="text-sm text-blue-500 hover:underline">&larr; Kembali ke
@@ -9,8 +9,8 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900">
 
                     <div x-data="{
                         editData: {},
@@ -40,21 +40,21 @@
                         @endif
 
                         <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                                <thead class="bg-gray-50 dark:bg-gray-700">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
                                     <tr>
                                         <th
-                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             Nama Guru</th>
                                         <th
-                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             Peran Tugas</th>
                                         <th
-                                            class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                            class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             Aksi</th>
                                     </tr>
                                 </thead>
-                                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                                <tbody class="bg-white divide-y divide-gray-200">
                                     @forelse ($penugasan as $tugas)
                                         <tr>
                                             <td class="px-6 py-4 whitespace-nowrap">
@@ -102,12 +102,12 @@
                                 @csrf
                                 <input type="hidden" name="form_type" value="create">
 
-                                <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Tambah Petugas Baru
+                                <h2 class="text-lg font-medium text-gray-900">Tambah Petugas Baru
                                 </h2>
                                 <div class="mt-6">
                                     <x-input-label for="id_guru" value="Pilih Guru" />
                                     <select id="id_guru" name="id_guru"
-                                        class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm mt-1 block w-full"
+                                        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
                                         required>
                                         <option value="">-- Pilih Guru --</option>
                                         @foreach ($gurus as $guru)
@@ -122,7 +122,7 @@
                                 <div class="mt-4">
                                     <x-input-label for="id_referensi_tugas" value="Pilih Peran Tugas (Aktif)" />
                                     <select id="id_referensi_tugas" name="id_referensi_tugas"
-                                        class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm mt-1 block w-full"
+                                        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
                                         required>
                                         <option value="">-- Pilih Tugas --</option>
                                         @foreach ($referensiTugas as $tugas)
@@ -147,15 +147,15 @@
                                 @method('PATCH')
                                 <input type="hidden" name="form_type" value="edit">
 
-                                <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Edit Peran Tugas</h2>
-                                <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                                <h2 class="text-lg font-medium text-gray-900">Edit Peran Tugas</h2>
+                                <p class="mt-1 text-sm text-gray-600">
                                     Anda hanya dapat mengubah peran tugas untuk petugas ini.
                                 </p>
                                 <div class="mt-6">
                                     <x-input-label for="edit_id_referensi_tugas" value="Pilih Peran Tugas (Aktif)" />
                                     <select id="edit_id_referensi_tugas" name="id_referensi_tugas"
                                         x-model="editData.id_referensi_tugas"
-                                        class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm mt-1 block w-full"
+                                        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
                                         required>
                                         <option value="">-- Pilih Tugas --</option>
                                         @foreach ($referensiTugas as $tugas)
@@ -175,10 +175,10 @@
                             <form method="POST" :action="`/penugasan-petugas/${deleteId}`" class="p-6">
                                 @csrf
                                 @method('DELETE')
-                                <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                                <h2 class="text-lg font-medium text-gray-900">
                                     Apakah Anda yakin ingin menghapus petugas ini?
                                 </h2>
-                                <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                                <p class="mt-1 text-sm text-gray-600">
                                     Penugasan petugas ini akan dibatalkan dari jadwal seleksi.
                                 </p>
                                 <div class="mt-6 flex justify-end">

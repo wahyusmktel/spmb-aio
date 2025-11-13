@@ -1,10 +1,9 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Data Referensi Akun CBT') }}
             @if ($tahunAktif)
-                <span
-                    class="ml-2 px-2 py-1 text-sm font-medium bg-green-100 text-green-800 rounded dark:bg-green-900 dark:text-green-300">
+                <span class="ml-2 px-2 py-1 text-sm font-medium bg-green-100 text-green-800 rounded">
                     T.A: {{ $tahunAktif->nama_tahun_pelajaran }}
                 </span>
             @endif
@@ -13,8 +12,8 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900">
 
                     @if ($tahunAktif)
                         <div x-data="{
@@ -31,7 +30,7 @@
 
                                 <x-secondary-button x-data=""
                                     x-on:click.prevent="$dispatch('open-modal', 'import-modal')"
-                                    class="bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white dark:text-gray-100">
+                                    class="bg-green-500 hover:bg-green-600 text-white">
                                     Import Excel
                                 </x-secondary-button>
                             </div>
@@ -44,8 +43,7 @@
                             </form>
 
                             @if (session('import_errors'))
-                                <div
-                                    class="mb-4 p-4 bg-red-100 text-red-700 rounded-lg dark:bg-red-900 dark:text-red-300">
+                                <div class="mb-4 p-4 bg-red-100 text-red-700 rounded-lg">
                                     <strong>Gagal mengimpor beberapa data:</strong>
                                     <ul class="list-disc list-inside mt-2">
                                         @foreach (session('import_errors') as $error)
@@ -56,22 +54,19 @@
                             @endif
 
                             @if (session('success'))
-                                <div
-                                    class="mb-4 p-4 bg-green-100 text-green-700 rounded-lg dark:bg-green-900 dark:text-green-300">
+                                <div class="mb-4 p-4 bg-green-100 text-green-700 rounded-lg">
                                     {{ session('success') }}
                                 </div>
                             @endif
 
                             @if (session('error'))
-                                <div
-                                    class="mb-4 p-4 bg-red-100 text-red-700 rounded-lg dark:bg-red-900 dark:text-red-300">
+                                <div class="mb-4 p-4 bg-red-100 text-red-700 rounded-lg">
                                     {{ session('error') }}
                                 </div>
                             @endif
 
                             @if ($errors->any() && !session('import_errors'))
-                                <div
-                                    class="mb-4 p-4 bg-red-100 text-red-700 rounded-lg dark:bg-red-900 dark:text-red-300">
+                                <div class="mb-4 p-4 bg-red-100 text-red-700 rounded-lg">
                                     <ul>
                                         @foreach ($errors->all() as $error)
                                             @if (!Str::contains($error, 'file import'))
@@ -83,50 +78,49 @@
                             @endif
 
                             <div class="overflow-x-auto">
-                                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                                    <thead class="bg-gray-50 dark:bg-gray-700">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
                                         <tr>
                                             <th
-                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                 Username</th>
                                             <th
-                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                 Status (Login)</th>
                                             <th
-                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                 Keterangan</th>
                                             <th
-                                                class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                                class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                 Aksi</th>
                                         </tr>
                                     </thead>
-                                    <tbody
-                                        class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                                    <tbody class="bg-white divide-y divide-gray-200">
                                         @forelse ($referensiAkunCbt as $akun)
                                             <tr>
                                                 <td class="px-6 py-4 whitespace-nowrap">{{ $akun->username }}</td>
                                                 <td class="px-6 py-4 whitespace-nowrap">
                                                     @if ($akun->status)
                                                         <span
-                                                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
+                                                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                                                             Aktif
                                                         </span>
                                                     @else
                                                         <span
-                                                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300">
-                                                            Tidak Aktif
+                                                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                                            Diblokir
                                                         </span>
                                                     @endif
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap">
                                                     @if ($akun->pesertaSeleksi)
                                                         <span
-                                                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">
+                                                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
                                                             Terpakai
                                                         </span>
                                                     @else
                                                         <span
-                                                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300">
+                                                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
                                                             Tersedia
                                                         </span>
                                                     @endif
@@ -152,7 +146,7 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="3" class="px-6 py-4 whitespace-nowrap text-center">
+                                                <td colspan="4" class="px-6 py-4 whitespace-nowrap text-center">
                                                     @if ($search)
                                                         Akun tidak ditemukan.
                                                     @else
@@ -173,24 +167,24 @@
                                 <form method="POST" action="{{ route('referensi-akun-cbt.import') }}" class="p-6"
                                     enctype="multipart/form-data">
                                     @csrf
-                                    <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                                    <h2 class="text-lg font-medium text-gray-900">
                                         Import Akun CBT (T.A: {{ $tahunAktif->nama_tahun_pelajaran }})
                                     </h2>
-                                    <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                                    <p class="mt-1 text-sm text-gray-600">
                                         Upload file Excel (xlsx, xls, csv) dengan header: <strong>username,
                                             password</strong>. Kolom <strong>status</strong> (0/1) opsional.
                                     </p>
                                     <div class="mt-6">
                                         <x-input-label for="file_import" value="File Excel" />
                                         <input id="file_import" name="file_import" type="file"
-                                            class="mt-1 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                                            class="mt-1 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
                                             required />
                                         <x-input-error :messages="$errors->get('file_import')" class="mt-2" />
                                     </div>
                                     <div class="mt-6 flex justify-end">
                                         <x-secondary-button x-on:click="$dispatch('close')">Batal</x-secondary-button>
                                         <x-primary-button
-                                            class="ml-3 bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700">Import</x-primary-button>
+                                            class="ml-3 bg-green-500 hover:bg-green-600">Import</x-primary-button>
                                     </div>
                                 </form>
                             </x-modal>
@@ -199,7 +193,7 @@
                                 <form method="POST" action="{{ route('referensi-akun-cbt.store') }}" class="p-6">
                                     @csrf
                                     <input type="hidden" name="form_type" value="create">
-                                    <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Tambah Akun</h2>
+                                    <h2 class="text-lg font-medium text-gray-900">Tambah Akun</h2>
                                     <div class="mt-6">
                                         <x-input-label for="username" value="Username" />
                                         <x-text-input id="username" name="username" type="text"
@@ -215,7 +209,7 @@
                                     <div class="mt-4">
                                         <x-input-label for="status" value="Status" />
                                         <select id="status" name="status"
-                                            class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm mt-1 block w-full">
+                                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full">
                                             <option value="1" {{ old('status', '1') == '1' ? 'selected' : '' }}>
                                                 Aktif</option>
                                             <option value="0" {{ old('status') == '0' ? 'selected' : '' }}>Tidak
@@ -235,7 +229,7 @@
                                     @csrf
                                     @method('PATCH')
                                     <input type="hidden" name="form_type" value="edit">
-                                    <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Edit Akun</h2>
+                                    <h2 class="text-lg font-medium text-gray-900">Edit Akun</h2>
                                     <div class="mt-6">
                                         <x-input-label for="edit_username" value="Username" />
                                         <x-text-input id="edit_username" name="username" type="text"
@@ -251,7 +245,7 @@
                                     <div class="mt-4">
                                         <x-input-label for="edit_status" value="Status" />
                                         <select id="edit_status" name="status" x-model="editData.status"
-                                            class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm mt-1 block w-full">
+                                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full">
                                             <option value="1">Aktif</option>
                                             <option value="0">Tidak Aktif</option>
                                         </select>
@@ -268,7 +262,7 @@
                                 <form method="POST" :action="`/referensi-akun-cbt/${deleteId}`" class="p-6">
                                     @csrf
                                     @method('DELETE')
-                                    <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                                    <h2 class="text-lg font-medium text-gray-900">
                                         Apakah Anda yakin ingin menghapus akun ini?
                                     </h2>
                                     <div class="mt-6 flex justify-end">
@@ -280,15 +274,14 @@
 
                         </div>
                     @else
-                        <div classid="alert-warning"
-                            class="p-4 mb-4 text-sm text-yellow-800 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300"
+                        <div classid="alert-warning" class="p-4 mb-4 text-sm text-yellow-800 rounded-lg bg-yellow-50"
                             role="alert">
                             <span class="font-medium">Perhatian!</span> Silahkan aktifkan tahun pelajaran terlebih
                             dahulu.
                             <p class="mt-2">Anda tidak dapat melihat atau menambah akun CBT jika tidak ada tahun
                                 pelajaran yang disetel sebagai "Aktif".</p>
                             <a href="{{ route('tahun-pelajaran.index') }}"
-                                class="font-bold underline hover:text-yellow-900 dark:hover:text-yellow-200">Klik di
+                                class="font-bold underline hover:text-yellow-900">Klik di
                                 sini untuk pergi ke halaman Tahun Pelajaran</a>.
                         </div>
                     @endif

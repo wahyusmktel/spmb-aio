@@ -1,6 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        <!-- 'dark:text-gray-200' dihapus -->
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Manajemen Soal TPA') }}
         </h2>
     </x-slot>
@@ -9,11 +10,13 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
             @if (session('success'))
-                <div class="mb-4 p-4 bg-green-100 text-green-700 rounded-lg dark:bg-green-900 dark:text-green-300">
+                <!-- 'dark:...' classes dihapus -->
+                <div class="mb-4 p-4 bg-green-100 text-green-700 rounded-lg">
                     {{ session('success') }}</div>
             @endif
             @if (session('error'))
-                <div class="mb-4 p-4 bg-red-100 text-red-700 rounded-lg dark:bg-red-900 dark:text-red-300">
+                <!-- 'dark:...' classes dihapus -->
+                <div class="mb-4 p-4 bg-red-100 text-red-700 rounded-lg">
                     {{ session('error') }}</div>
             @endif
 
@@ -24,8 +27,9 @@
 
                 <form action="{{ route('tpa-soal.index') }}" method="GET" class="flex items-center space-x-2">
                     <x-input-label for="filter_grup_id" value="Filter Grup:" class="whitespace-nowrap" />
+                    <!-- 'dark:...' classes dan '...' dihapus -->
                     <select id="filter_grup_id" name="filter_grup_id" onchange="this.form.submit()"
-                        class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 ... rounded-md shadow-sm block w-full">
+                        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block w-full">
                         <option value="">-- Tampilkan Semua --</option>
                         @foreach ($grups as $grup)
                             <option value="{{ $grup->id }}" {{ $filter_grup_id == $grup->id ? 'selected' : '' }}>
@@ -36,34 +40,52 @@
                 </form>
             </div>
 
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
+            <!-- 'dark:bg-gray-800' dihapus -->
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <!-- 'dark:text-gray-100' diganti 'text-gray-900' -->
+                <div class="p-6 text-gray-900">
                     <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                            <thead class="bg-gray-50 dark:bg-gray-700">
+                        <!-- 'dark:divide-gray-700' dihapus -->
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <!-- 'dark:bg-gray-700' dihapus -->
+                            <thead class="bg-gray-50">
                                 <tr>
-                                    <th class="px-6 py-3 text-left ... uppercase">ID</th>
-                                    <th class="px-6 py-3 text-left ... uppercase">Grup Soal</th>
-                                    <th class="px-6 py-3 text-left ... uppercase">Pertanyaan</th>
-                                    <th class="px-6 py-3 text-left ... uppercase">Gambar</th>
-                                    <th class="px-6 py-3 text-center ... uppercase">Kunci</th>
-                                    <th class="px-6 py-3 text-right ... uppercase">Aksi</th>
+                                    <!-- '...' dan 'dark:...' dihapus dari semua <th> -->
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        ID</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Grup Soal</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Pertanyaan</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Gambar</th>
+                                    <th
+                                        class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Kunci</th>
+                                    <th
+                                        class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white dark:bg-gray-800 divide-y ...">
+                            <!-- 'dark:bg-gray-800' dan 'dark:...' dihapus dari <tbody> -->
+                            <tbody class="bg-white divide-y divide-gray-200">
                                 @forelse ($soals as $soal)
                                     <tr>
-                                        <td class="px-6 py-4 ...">{{ $soal->id }}</td>
-                                        <td class="px-6 py-4 ...">
+                                        <td class="px-6 py-4 whitespace-nowrap align-top">{{ $soal->id }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap align-top">
                                             <span
                                                 class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
                                                 {{ $soal->tpaGrupSoal->nama_grup ?? 'N/A' }}
                                             </span>
                                         </td>
-                                        <td class="px-6 py-4 ... text-sm">
+                                        <td class="px-6 py-4 text-sm align-top">
                                             {{ Str::limit($soal->pertanyaan_teks, 100) }}
                                         </td>
-                                        <td class="px-6 py-4 ...">
+                                        <td class="px-6 py-4 whitespace-nowrap align-top">
                                             @if ($soal->gambar_soal)
                                                 <img src="{{ Storage::url($soal->gambar_soal) }}"
                                                     alt="Soal {{ $soal->id }}"
@@ -72,17 +94,22 @@
                                                 -
                                             @endif
                                         </td>
-                                        <td class="px-6 py-4 ... font-bold text-center">{{ $soal->jawaban_benar }}</td>
-                                        <td class="px-6 py-4 ... text-right flex space-x-2">
-                                            <a href="{{ route('tpa-soal.edit', $soal->id) }}">
-                                                <x-secondary-button>Edit</x-secondary-button>
-                                            </a>
-                                            <form action="{{ route('tpa-soal.destroy', $soal->id) }}" method="POST"
-                                                onsubmit="return confirm('Yakin hapus soal ini?');">
-                                                @csrf
-                                                @method('DELETE')
-                                                <x-danger-button type="submit">Hapus</x-danger-button>
-                                            </form>
+                                        <td class="px-6 py-4 font-bold text-center align-top">
+                                            {{ $soal->jawaban_benar }}</td>
+                                        <td
+                                            class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium align-top">
+                                            <div
+                                                class="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2 justify-end">
+                                                <a href="{{ route('tpa-soal.edit', $soal->id) }}">
+                                                    <x-secondary-button>Edit</x-secondary-button>
+                                                </a>
+                                                <form action="{{ route('tpa-soal.destroy', $soal->id) }}"
+                                                    method="POST" onsubmit="return confirm('Yakin hapus soal ini?');">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <x-danger-button type="submit">Hapus</x-danger-button>
+                                                </form>
+                                            </div>
                                         </td>
                                     </tr>
                                 @empty

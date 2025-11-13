@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Input Absensi:') }} <span class="font-bold">{{ $jadwal->judul_kegiatan }}</span>
         </h2>
         <a href="{{ route('jadwal-seleksi.index') }}" class="text-sm text-blue-500 hover:underline">&larr; Kembali ke
@@ -12,12 +12,12 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
                 @if (session('success'))
-                    <div class="mb-4 p-4 bg-green-100 text-green-700 rounded-lg dark:bg-green-900 dark:text-green-300">
+                    <div class="mb-4 p-4 bg-green-100 text-green-700 rounded-lg">
                         {{ session('success') }}
                     </div>
                 @endif
                 @if (session('error'))
-                    <div class="mb-4 p-4 bg-red-100 text-red-700 rounded-lg dark:bg-red-900 dark:text-red-300">
+                    <div class="mb-4 p-4 bg-red-100 text-red-700 rounded-lg">
                         {{ session('error') }}
                     </div>
                 @endif
@@ -25,40 +25,37 @@
                 <form action="{{ route('absensi.store', $jadwal->id) }}" method="POST">
                     @csrf
 
-                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
 
-                        <div class="flex border-b border-gray-200 dark:border-gray-700">
+                        <div class="flex border-b border-gray-200">
                             <button type="button" @click="tab = 'peserta'"
-                                :class="{ 'border-indigo-500 text-indigo-600 dark:text-indigo-400': tab === 'peserta', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300': tab !== 'peserta' }"
+                                :class="{ 'border-indigo-500 text-indigo-600': tab === 'peserta', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': tab !== 'peserta' }"
                                 class="py-4 px-6 font-medium text-sm border-b-2 focus:outline-none">
                                 Peserta ({{ $peserta->count() }})
                             </button>
                             <button type="button" @click="tab = 'petugas'"
-                                :class="{ 'border-indigo-500 text-indigo-600 dark:text-indigo-400': tab === 'petugas', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300': tab !== 'petugas' }"
+                                :class="{ 'border-indigo-500 text-indigo-600': tab === 'petugas', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': tab !== 'petugas' }"
                                 class="py-4 px-6 font-medium text-sm border-b-2 focus:outline-none">
                                 Petugas ({{ $petugas->count() }})
                             </button>
                         </div>
 
-                        <div x-show="tab === 'peserta'" class="p-6 text-gray-900 dark:text-gray-100">
+                        <div x-show="tab === 'peserta'" class="p-6 text-gray-900">
                             <h3 class="text-lg font-medium mb-4">Absensi Peserta</h3>
                             <div class="overflow-x-auto">
-                                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                                    <thead class="bg-gray-50 dark:bg-gray-700">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
                                         <tr>
-                                            <th
-                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                                                 Nama Peserta</th>
-                                            <th
-                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                                                 No. Pendaftaran</th>
                                             <th
-                                                class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
+                                                class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">
                                                 Kehadiran (Ceklis)</th>
                                         </tr>
                                     </thead>
-                                    <tbody
-                                        class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                                    <tbody class="bg-white divide-y divide-gray-200">
                                         @forelse ($peserta as $p)
                                             <tr>
                                                 <td class="px-6 py-4 whitespace-nowrap">{{ $p->nama_pendaftar }}</td>
@@ -67,7 +64,7 @@
                                                     <input type="checkbox" name="hadir_peserta[]"
                                                         value="{{ $p->id }}"
                                                         {{ $p->kehadiran ? 'checked' : '' }}
-                                                        class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800">
+                                                        class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500">
                                                 </td>
                                             </tr>
                                         @empty
@@ -80,32 +77,24 @@
                             </div>
                         </div>
 
-                        <div x-show="tab === 'petugas'" class="p-6 text-gray-900 dark:text-gray-100"
-                            style="display: none;">
-                            <h3 class="text-lg font-medium mb-4">Absensi Petugas</h3>
+                        <div x-show="tab === 'petugas'" class="p-6 text-gray-900" style="display: none;">
+                            <h3 class="text-lg font-medium mb-4">Absensi Petugas (Verifikasi)</h3>
                             <div class="overflow-x-auto">
-                                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                                    <thead class="bg-gray-50 dark:bg-gray-700">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
                                         <tr>
-                                            <th
-                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                                                 Nama Petugas</th>
-                                            <th
-                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                                                 Peran Tugas</th>
-                                            <th
-                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                                                 Bukti Mandiri</th>
                                             <th
-                                                class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
+                                                class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">
                                                 Verifikasi Hadir (Ceklis)</th>
-                                            {{-- <th
-                                                class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
-                                                Kehadiran (Ceklis)</th> --}}
                                         </tr>
                                     </thead>
-                                    <tbody
-                                        class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                                    <tbody class="bg-white divide-y divide-gray-200">
                                         @forelse ($petugas as $p)
                                             <tr>
                                                 <td class="px-6 py-4 whitespace-nowrap">
@@ -116,7 +105,7 @@
                                                     @if ($p->absensi_mandiri_at)
                                                         <a href="{{ Storage::url($p->file_bukti_mandiri) }}"
                                                             target="_blank"
-                                                            class="text-sm text-green-600 dark:text-green-400 hover:underline">
+                                                            class="text-sm text-green-600 hover:underline">
                                                             Lihat Foto
                                                         </a>
                                                         <div class="text-xs text-gray-500">
@@ -129,18 +118,12 @@
                                                     <input type="checkbox" name="hadir_petugas[]"
                                                         value="{{ $p->id }}"
                                                         {{ $p->absensi_admin ? 'checked' : '' }}
-                                                        class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800">
+                                                        class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500">
                                                 </td>
-                                                {{-- <td class="px-6 py-4 whitespace-nowrap text-center">
-                                                    <input type="checkbox" name="hadir_petugas[]"
-                                                        value="{{ $p->id }}"
-                                                        {{ $p->kehadiran ? 'checked' : '' }}
-                                                        class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800">
-                                                </td> --}}
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="3" class="text-center py-4">Belum ada petugas.</td>
+                                                <td colspan="4" class="text-center py-4">Belum ada petugas.</td>
                                             </tr>
                                         @endforelse
                                     </tbody>
@@ -148,8 +131,7 @@
                             </div>
                         </div>
 
-                        <div
-                            class="p-6 bg-gray-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 text-right">
+                        <div class="p-6 bg-gray-50 border-t border-gray-200 text-right">
                             <x-primary-button type="submit">
                                 Simpan Laporan Absensi
                             </x-primary-button>

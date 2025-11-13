@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Rekapitulasi Laporan Petugas') }}
         </h2>
     </x-slot>
@@ -9,15 +9,15 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
             @if (session('error'))
-                <div class="mb-4 p-4 bg-red-100 text-red-700 rounded-lg dark:bg-red-900 dark:text-red-300">
+                <div class="mb-4 p-4 bg-red-100 text-red-700 rounded-lg">
                     {{ session('error') }}
                 </div>
             @endif
 
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mb-6">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
+                <div class="p-6 text-gray-900">
                     <h3 class="text-lg font-medium mb-4">Filter Laporan</h3>
-                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                    <p class="text-sm text-gray-600 mb-4">
                         Pilih filter berdasarkan **Kegiatan** (prioritas) ATAU berdasarkan **Rentang Waktu**.
                     </p>
 
@@ -27,7 +27,7 @@
                             <div class="md:col-span-2">
                                 <x-input-label for="id_jadwal_seleksi" value="Berdasarkan Kegiatan" />
                                 <select id="id_jadwal_seleksi" name="id_jadwal_seleksi"
-                                    class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm mt-1 block w-full">
+                                    class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full">
                                     <option value="">-- Pilih Kegiatan --</option>
                                     @foreach ($jadwals as $jadwal)
                                         <option value="{{ $jadwal->id }}"
@@ -57,7 +57,7 @@
                         </div>
                     </form>
 
-                    <hr class="my-6 dark:border-gray-700">
+                    <hr class="my-6 border-gray-200">
 
                     <h3 class="text-lg font-medium mb-4">Unduh Laporan</h3>
                     <div class="flex space-x-4">
@@ -72,7 +72,7 @@
                         </form>
 
                         <a href="{{ route('laporan.petugas.download') }}" target="_blank"
-                            class="inline-flex items-center px-4 py-2 bg-gray-800 ...">
+                            class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
                             Download Semua (Tanpa Filter)
                         </a>
                     </div>
@@ -80,43 +80,62 @@
             </div>
 
             @if (isset($petugas))
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900 dark:text-gray-100">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6 text-gray-900">
                         <h3 class="text-lg font-medium mb-4">Preview Data ({{ $stats['total'] }} Petugas Ditemukan)
                         </h3>
                         <div class="mb-4 flex space-x-4">
-                            <span class="px-2 py-1 text-sm ...">Hadir: {{ $stats['hadir'] }}</span>
-                            <span class="px-2 py-1 text-sm ...">Tidak Hadir: {{ $stats['tidak_hadir'] }}</span>
+                            <span
+                                class="px-2 py-1 text-sm font-semibold rounded-full bg-green-100 text-green-800">Hadir:
+                                {{ $stats['hadir'] }}</span>
+                            <span class="px-2 py-1 text-sm font-semibold rounded-full bg-red-100 text-red-800">Tidak
+                                Hadir: {{ $stats['tidak_hadir'] }}</span>
                         </div>
 
                         <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                                <thead class="bg-gray-50 dark:bg-gray-700">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
                                     <tr>
-                                        <th class="px-6 py-3 ... uppercase">No</th>
-                                        <th class="px-6 py-3 ... uppercase">Kegiatan</th>
-                                        <th class="px-6 py-3 ... uppercase">Nama Petugas</th>
-                                        <th class="px-6 py-3 ... uppercase">Jabatan</th>
-                                        <th class="px-6 py-3 ... uppercase">Peran Tugas</th>
-                                        <th class="px-6 py-3 ... uppercase">Status Hadir</th>
+                                        <th
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            No</th>
+                                        <th
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Kegiatan</th>
+                                        <th
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Nama Petugas</th>
+                                        <th
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Jabatan</th>
+                                        <th
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Peran Tugas</th>
+                                        <th
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Status Hadir</th>
                                     </tr>
                                 </thead>
-                                <tbody class="bg-white dark:bg-gray-800 ...">
+                                <tbody class="bg-white divide-y divide-gray-200">
                                     @forelse ($petugas as $p)
                                         <tr>
-                                            <td class="px-6 py-4 ...">{{ $loop->iteration }}</td>
-                                            <td class="px-6 py-4 ...">{{ $p->jadwalSeleksi->judul_kegiatan ?? 'N/A' }}
+                                            <td class="px-6 py-4 whitespace-nowrap">{{ $loop->iteration }}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                {{ $p->jadwalSeleksi->judul_kegiatan ?? 'N/A' }}
                                             </td>
-                                            <td class="px-6 py-4 ...">{{ $p->guru->nama_guru ?? 'N/A' }}</td>
-                                            <td class="px-6 py-4 ...">{{ $p->guru->mata_pelajaran ?? 'N/A' }}</td>
-                                            <td class="px-6 py-4 ...">
+                                            <td class="px-6 py-4 whitespace-nowrap">{{ $p->guru->nama_guru ?? 'N/A' }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                {{ $p->guru->mata_pelajaran ?? 'N/A' }}</td>
+                                            <td class="px-6 py-4 whitespace-pre-wrap">
                                                 {{ $p->referensiTugas->deskripsi_tugas ?? 'N/A' }}</td>
-                                            <td class="px-6 py-4 ...">
-                                                @if ($p->kehadiran)
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                @if ($p->absensi_admin)
                                                     <span
-                                                        class="px-2 ... rounded-full bg-green-100 text-green-800">Hadir</span>
+                                                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Hadir</span>
                                                 @else
-                                                    <span class="px-2 ... rounded-full bg-red-100 text-red-800">Tidak
+                                                    <span
+                                                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Tidak
                                                         Hadir</span>
                                                 @endif
                                             </td>
